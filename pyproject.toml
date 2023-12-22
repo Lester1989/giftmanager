@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "giftmanager"
+version = "0.1.0"
+description = ""
+authors = ["Lester1989 <lester@techfak.uni-bielefeld.de>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.105.0"
+Jinja2 = "^3.1.2"
+uvicorn = "^0.25.0"
+SQLAlchemy = "^2.0.23"
+alembic = "^1.13.1"
+ulid-py = "^1.1.0"
+fastapi-sqlalchemy = "^0.2.1"
+pytest = "^7.4.3"
+httpx = "^0.26.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
