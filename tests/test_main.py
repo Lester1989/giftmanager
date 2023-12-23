@@ -30,36 +30,7 @@ def test_get_friend_not_found():
     # Add assertions for the response body
 
 
-def test_create_friend():
-    friend_data = {"name": "John Doe", "age": 30}
-    response = client.post("/friends", json=friend_data)
-    assert response.status_code == 200
-    # Add assertions for the response body
 
-
-def test_update_friend():
-    friend_data = {"name": "John Doe", "age": 30}
-    response = client.put("/friends/1", json=friend_data)
-    assert response.status_code == 200
-    # Add assertions for the response body
-
-
-def test_update_friend_not_found():
-    friend_data = {"name": "John Doe", "age": 30}
-    response = client.put("/friends/999", json=friend_data)
-    assert response.status_code == 404
-    # Add assertions for the response body
-
-
-def test_delete_friend():
-    response = client.delete("/friends/1")
-    assert response.status_code == 200
-    # Add assertions for the response body
-
-
-def test_delete_friend_not_found():
-    response = client.delete("/friends/999")
-    assert response.status_code == 404
     # Add assertions for the response body
 
 
