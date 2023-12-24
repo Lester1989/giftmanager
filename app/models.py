@@ -34,5 +34,16 @@ class GiftIdea(Base):
     done: Mapped[bool]
     done_at: Mapped[Optional[datetime]]
 
+class Contact(Base):
+    __tablename__ = "contact"
+    id: Mapped[str] = mapped_column(primary_key=True)
+    friend_id: Mapped[str]
+    date: Mapped[datetime]
+    via_telephone: Mapped[bool]
+    via_email: Mapped[bool]
+    via_messenger: Mapped[bool]
+    in_person: Mapped[bool]
+
+
 
 

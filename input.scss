@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .btn-rainbow {
+      @apply bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out;
+    }
+    .btn-icon-rainbow {
+      @apply bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold p-2 rounded-full focus:ring transform transition hover:scale-105 duration-300 ease-in-out;
+    }
+    .chip {
+      @apply relative grid select-none items-center whitespace-nowrap rounded-lg py-1.5 px-3 font-sans text-xs font-bold uppercase text-white;
+    }
+    .chip-primary {
+      @apply bg-indigo-500 ;
+    }
+    .chip-secondary {
+      @apply bg-green-700 ;
+    }
+    .chip-warning {
+      @apply bg-purple-500 ;
+    }
+    .form-field{
+        @apply shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:ring transform transition hover:scale-105 duration-300 ease-in-out
+    }
+
+  }

@@ -3,7 +3,6 @@ from typing import Optional
 from datetime import datetime
 
 class Friend(BaseModel):
-    __tablename__ = "user_account"
     first_name: str
     last_name: Optional[str]
     address: Optional[str]
@@ -16,10 +15,9 @@ class Friend(BaseModel):
     id: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class GiftIdea(BaseModel):
-    __tablename__ = "gift_idea"
     friend_id: str
     name: str
     description: Optional[str]
@@ -28,6 +26,21 @@ class GiftIdea(BaseModel):
     done: bool
     done_at: Optional[datetime]
     id: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+class Contact(BaseModel):
+    friend_id: str
+    date: datetime
+    via_telephone: bool
+    via_email: bool
+    via_messenger: bool
+    in_person: bool
+    id: Optional[str] = None
+
+    class Config:
+        from_attributes = True
 
 
 
