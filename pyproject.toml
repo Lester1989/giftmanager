@@ -17,6 +17,7 @@ fastapi-sqlalchemy = "^0.2.1"
 pytest = "^7.4.3"
 httpx = "^0.26.0"
 pytailwindcss = "^0.2.0"
+python-multipart = "^0.0.6"
 
 
 [build-system]
