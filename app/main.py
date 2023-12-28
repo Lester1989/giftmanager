@@ -54,10 +54,10 @@ def delete_friend(request: Request, friend_id: str):
 
 @app.get("/friends/{friend_id}", response_class=HTMLResponse)
 def get_friend(request: Request, friend_id: str):
-    friend = db.session.query(Friend).get(friend_id)
-    if not friend:
+    if friend := db.session.query(Friend).get(friend_id):
+        return templates.TemplateResponse("friend_detail.html", {"request": request, "friend": friend})
+    else:
         raise HTTPException(status_code=404, detail="Friend not found")
-    return templates.TemplateResponse("friend_detail.html", {"request": request, "friend": friend})
 
 @app.get("/calendar", response_class=HTMLResponse)
 def get_calendar(request: Request):

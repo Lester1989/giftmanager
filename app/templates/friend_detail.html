@@ -1,6 +1,67 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Home</h1>
-    <p> Welcome to the home page!</p>
+<div class="flex flex-col w-full xl:w-3/5 justify-start lg:items-start overflow-y-hidden">
+    <div class="bg-gray-900 opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
+        <h1 class="text-2xl font-bold mb-4">{{ friend.first_name }} {{ friend.last_name }}</h1>
+        <h2 class="text-xl font-bold mb-4">Letzte Kontakte</h2>
+        <div class="flex flex-row flex-wrap gap-4">
+            <a href="/todo"
+                class="w-32 h-32 border-purple-800 hover:border-purple-500 border-4 rounded-lg text-9xl text-center hover:text-indigo-300">+</a>
+            <div class="w-32 h-32 border-purple-800 hover:border-purple-500 border-4 rounded-lg"></div>
+        </div>
+        <h2 class="text-xl font-bold mb-4">Geschenkideen</h2>
+        <div class="flex flex-row flex-wrap gap-4">
+            <a href="/todo"
+                class="w-32 h-32 border-green-800 hover:border-green-500 border-4 rounded-lg text-9xl text-center hover:text-indigo-300">+</a>
+            <div class="w-32 h-32 border-green-800 hover:border-green-500 border-4 rounded-lg"></div>
+        </div>
+        <h2 class="text-xl font-bold mb-4">nächste Events</h2>
+        <div class="flex flex-row flex-wrap gap-4">
+            <a href="/todo"
+                class="w-32 h-32 border-indigo-900 hover:border-indigo-500 border-4 rounded-lg text-9xl text-center hover:text-indigo-300">+</a>
+            <div class="w-32 h-32 border-indigo-900 hover:border-indigo-500 border-4 rounded-lg"></div>
+        </div>
+    </div>
+</div>
+<div class="w-full xl:w-2/5 px-12 overflow-hidden">
+    <div class="bg-gray-900 opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
+
+        <form action="/edit_friend/{{friend.id}}" method="post">
+            <div class="mb-4">
+                <label for="last_name" class="block font-bold">Last Name:</label>
+                <input class="form-field" type="text" id="last_name" name="last_name" value="{{ friend.last_name }}">
+            </div>
+            <div class="mb-4">
+                <label for="address" class="block font-bold">Address:</label>
+                <input class="form-field" type="text" id="address" name="address" value="{{ friend.address }}">
+            </div>
+            <div class="mb-4">
+                <label for="phone_number" class="block font-bold">Phone Number:</label>
+                <input class="form-field" type="text" id="phone_number" name="phone_number" value="{{ friend.phone_number }}">
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block font-bold">Email:</label>
+                <input class="form-field" type="email" id="email" name="email" value="{{ friend.email }}">
+            </div>
+            <div class="mb-4">
+                <label for="birthday" class="block font-bold">Birthday:</label>
+                <input class="form-field" type="date" id="birthday" name="birthday" value="{{ friend.birthday }}">
+            </div>
+            <div class="mb-4">
+                <label for="notes" class="block font-bold">Notes:</label>
+                <textarea class="form-field" id="notes" name="notes">{{ friend.notes }}</textarea>
+            </div>
+            <div class="mb-4">
+                <label for="receives_christmas_gift" class="block font-bold">Receives Christmas Gift:</label>
+                <input type="checkbox" id="receives_christmas_gift" name="receives_christmas_gift" value="{{ friend.receives_christmas_gift }}">
+            </div>
+            <div class="mb-4">
+                <label for="receives_birthday_gift" class="block font-bold">Receives Birthday Gift:</label>
+                <input type="checkbox" id="receives_birthday_gift" name="receives_birthday_gift" value="{{ friend.receives_birthday_gift }}">
+            </div>
+            <button type="submit" class="btn-rainbow">Edit Friend</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

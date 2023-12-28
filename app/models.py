@@ -44,6 +44,13 @@ class Contact(Base):
     via_messenger: Mapped[bool]
     in_person: Mapped[bool]
 
+class ImportantEvent(Base):
+    __tablename__ = "important_event"
+    id: Mapped[str] = mapped_column(primary_key=True)
+    friend_id: Mapped[str]
+    date: Mapped[datetime]
+    name: Mapped[str]
+    description: Mapped[Optional[str]]
 
 
 
