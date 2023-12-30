@@ -4,12 +4,15 @@ from typing import List
 from typing import Optional
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
-from ulid import new as new_ulid
+from app.pydantic_schematizer import create_pydantic,BaseModel
+
 
 class Base(DeclarativeBase):
     pass
 
+class FriendAPI(BaseModel):
+    pass
+@create_pydantic(globals())
 class Friend(Base):
     __tablename__ = "user_account"
     id: Mapped[str] = mapped_column(primary_key=True)
@@ -23,6 +26,9 @@ class Friend(Base):
     receives_christmas_gift: Mapped[bool]
     receives_birthday_gift: Mapped[bool]
 
+class GiftIdeaAPI(BaseModel):
+    pass
+@create_pydantic(globals())
 class GiftIdea(Base):
     __tablename__ = "gift_idea"
     id: Mapped[str] = mapped_column(primary_key=True)
@@ -34,6 +40,9 @@ class GiftIdea(Base):
     done: Mapped[bool]
     done_at: Mapped[Optional[datetime]]
 
+class ContactAPI(BaseModel):
+    pass
+@create_pydantic(globals())
 class Contact(Base):
     __tablename__ = "contact"
     id: Mapped[str] = mapped_column(primary_key=True)
@@ -44,6 +53,9 @@ class Contact(Base):
     via_messenger: Mapped[bool]
     in_person: Mapped[bool]
 
+class ImportantEventAPI(BaseModel):
+    pass
+@create_pydantic(globals())
 class ImportantEvent(Base):
     __tablename__ = "important_event"
     id: Mapped[str] = mapped_column(primary_key=True)

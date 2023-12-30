@@ -6,7 +6,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from app.models import Friend, GiftIdea
-from app.schemas import Friend as FriendAPI, GiftIdea as GiftIdeaAPI
 from fastapi import FastAPI, HTTPException
 from app.models import Friend, GiftIdea
 from fastapi_sqlalchemy import DBSessionMiddleware  # middleware helper

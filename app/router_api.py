@@ -2,15 +2,18 @@ from fastapi import APIRouter
 from fastapi import HTTPException
 from fastapi_sqlalchemy import db
 from ulid import new as new_ulid
-from app.models import Friend, GiftIdea
-from app.schemas import Friend as FriendAPI, GiftIdea as GiftIdeaAPI
+from app.models import Friend, GiftIdea,FriendAPI,GiftIdeaAPI
+# from app.deprecated_schemas import Friend as FriendAPI, GiftIdea as GiftIdeaAPI
 
 
 app = APIRouter(prefix='/api', tags=['api'])
 
 @app.get("/friends", response_model=list[FriendAPI])
 def get_friends():
-    return db.session.query(Friend).all()
+    result = db.session.query(Friend).all()
+    for friend in result:
+        print(friend)
+    return result
 
 @app.get("/friends/{friend_id}", response_model=FriendAPI)
 def get_friend(friend_id: str):
