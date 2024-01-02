@@ -1,14 +1,37 @@
 {% extends "base.html" %}
 
+{% import 'icons.j2' as icons %}
 {% block content %}
 <div class="flex flex-col w-full xl:w-3/5 justify-start lg:items-start overflow-y-hidden">
     <div class="bg-gray-900 opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
         <h1 class="text-2xl font-bold mb-4">{{ friend.first_name }} {{ friend.last_name }}</h1>
-        <h2 class="text-xl font-bold mb-4">Letzte Kontakte</h2>
+        <h2 class="text-xl font-bold mb-4">Letzte Interaktionen</h2>
         <div class="flex flex-row flex-wrap gap-4">
             <a href="/todo"
                 class="w-32 h-32 border-purple-800 hover:border-purple-500 border-4 rounded-lg text-9xl text-center hover:text-indigo-300">+</a>
-            <div class="w-32 h-32 border-purple-800 hover:border-purple-500 border-4 rounded-lg"></div>
+            {% for interaction in interactions %}
+            <div class="w-32 h-32 border-purple-800 hover:border-purple-500 border-4 rounded-lg relative {% if interaction.ask_again %} animate-pulse {% endif %}">
+            <div class="absolute w-full h-full text-gray-800 -z-10">
+            {% if interaction.via == InteractionViaType.email %}
+            {{ icons.email("w-full h-full") }}
+            {% elif interaction.via == InteractionViaType.telephone %}
+            {{ icons.telephone("w-full h-full") }}
+            {% elif interaction.via == InteractionViaType.messenger %}
+            {{ icons.messenger("w-full h-full") }}
+            {% elif interaction.via == InteractionViaType.in_person %}
+            {{ icons.in_person("w-full h-full") }}
+            {% else %}
+            {{ icons.missing("w-full h-full") }}
+            {% endif %}
+            </div>
+            <div class="absolute top-0 px-2 py-1 text-center w-full">
+            {{ interaction.date.strftime("%d.%m.%Y") }}
+            </div>
+            <div class="absolute top-6 px-2 py-1 text-center w-full text-wrap h-full overflow-clip">
+            {{ interaction.talking_points}}
+            </div>
+            </div>
+            {% endfor %}
         </div>
         <h2 class="text-xl font-bold mb-4">Geschenkideen</h2>
         <div class="flex flex-row flex-wrap gap-4">

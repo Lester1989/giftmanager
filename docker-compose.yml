@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+  fsm:
+    image: fsm
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    environment:
+      - CONNECTIONSTRING=postgresql+psycopg2://friendshipmanager:friendshipmanager@postgres:5432/friendshipmanager
+    command: sh -c "alembic upgrade head && uvicorn app.main:app --port 8800 --host 0.0.0.0"
+    ports:
+      - 8800:8800
+  postgres:
+    image: postgres:13.1-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: friendshipmanager
+      POSTGRES_PASSWORD: friendshipmanager
+      POSTGRES_DB: friendshipmanager
+    volumes:
+      - friendshipmanager_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U friendshipmanager
+      interval: 10s
+      timeout: 30s
+      retries: 3
+      start_period: 10s
+    ports:
+      - 5434:5432
+
+  pgadmin4-browser:
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "l.ester@gmx.de"
+      PGADMIN_DEFAULT_PASSWORD: "friendshipmanager"
+volumes:
+  friendshipmanager_static:
+  friendshipmanager_postgres:
