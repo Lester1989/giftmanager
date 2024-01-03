@@ -41,6 +41,8 @@ def add_friend(request: Request,first_name: str=Form(), last_name: Optional[str]
     db.session.commit()
     return RedirectResponse(url='/friends', status_code=status.HTTP_302_FOUND)
 
+
+
 @app.get("/delete_friend/{friend_id}", response_class=RedirectResponse)
 def delete_friend(request: Request, friend_id: str):
     friend = db.session.query(Friend).get(friend_id)
@@ -69,6 +71,33 @@ def get_friend(request: Request, friend_id: str):
                         ]})
     else:
         raise HTTPException(status_code=404, detail="Friend not found")
+    
+@app.get("/new_interaction/{friend_id}", response_class=HTMLResponse)
+def new_interaction(request: Request, friend_id: str):
+    if friend := db.session.query(Friend).get(friend_id):
+        return templates.TemplateResponse(
+            "new_interaction.html", 
+            {
+                "request": request, 
+                "friend": friend, 
+                "date": datetime.now().strftime("%Y-%m-%dT%H:%M"),
+                "InteractionViaType": InteractionViaType,
+                "talking_point_suggstions": [
+                    "Hobbies",
+                    "Kinder",
+                    "Beziehung",
+                    "berufliche Situation",
+                ]
+            })
+    else:
+        raise HTTPException(status_code=404, detail="Friend not found")
+    
+@app.post("/add_interaction/{friend_id}", response_class=RedirectResponse)
+def add_interaction(request: Request, friend_id: str, date: datetime = Form(datetime.now()), via: InteractionViaType = Form(InteractionViaType.telephone), talking_points: str = Form(""), ask_again: bool = Form(False)):
+    interaction = InteractionLogAPI(friend_id=friend_id, date=date, via=via, talking_points=talking_points, ask_again=ask_again)
+    db.session.add(interaction)
+    db.session.commit()
+    return RedirectResponse(url=f'/friends/{friend_id}', status_code=status.HTTP_302_FOUND)
 
 @app.get("/calendar", response_class=HTMLResponse)
 def get_calendar(request: Request):
