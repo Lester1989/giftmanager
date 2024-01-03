@@ -21,8 +21,8 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [ ] Authentication
 - [ ] create detail views
 - [ ] create edit views
-- [ ] create delete routes
-- [ ] use create form
+- [X] create delete routes
+- [X] use create form
 - [ ] add contact (whatsapp, facebook, call, mailto) links for friends
 - [ ] add social media links for friends
 - [ ] add talkingpoints to friends

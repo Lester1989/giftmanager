@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>New Interaction with {{ friend.first_name }}</h1>
+
+<pre>{{ friend.notes}}</pre>
+
+<ul>
+    {% for suggestion in talking_point_suggstions %}
+    <li>{{ suggestion }}</li>
+    {% endfor %}
+</ul>
+
+<form action="{{ url_for('create_interaction') }}" method=post>
+    <div class="flex items-center mb-4">
+    <input id="default-radio-1" type="radio" value="telephone" name="via" class="form-radio">
+    <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-300">telephone</label>
+</div>
+<div class="flex items-center">
+    <input  id="default-radio-2" type="radio" value="email" name="via" class="form-radio">
+    <label for="default-radio-2" class="ms-2 text-sm font-medium text-gray-300">email</label>
+</div>
+<div class="flex items-center">
+    <input  id="default-radio-3" type="radio" value="messenger" name="via" class="form-radio">
+    <label for="default-radio-3" class="ms-2 text-sm font-medium text-gray-300">messenger</label>
+</div>
+<div class="flex items-center">
+    <input  id="default-radio-4" type="radio" value="in_person" name="via" class="form-radio">
+    <label for="default-radio-4" class="ms-2 text-sm font-medium text-gray-300">in_person</label>
+</div>
+<div class="flex items-center">
+    <label for="notes" class="ms-2 text-sm font-medium text-gray-300">Notes</label>
+    <textarea name="notes" id="notes" cols="30" rows="10"></textarea>
+</div>
+<div class="flex items-center">
+    <input id="ask_again" type="checkbox" value="" name="ask_again" class="form-radio">
+    <label for="ask_again" class="ms-2 text-sm font-medium text-gray-300">ask_again</label>
+</div>
+
+</form>
+
+{% endblock %}

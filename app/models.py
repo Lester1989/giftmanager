@@ -4,15 +4,25 @@ from typing import List
 from typing import Optional
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
+from app.pydantic_schematizer import create_pydantic,BaseModel
+from enum import Enum as EnumClass
+from sqlalchemy import Enum as EnumDB
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 from ulid import new as new_ulid
 
-class Base(DeclarativeBase):
-    pass
+def new_uuid():
+    return new_ulid().uuid
 
+class Base(DeclarativeBase):
+    __table_args__ = {'schema': 'public'}
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True,default=new_uuid,type_=UUID(as_uuid=True))
+
+class FriendAPI(BaseModel):
+    pass
+@create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
 class Friend(Base):
     __tablename__ = "user_account"
-    id: Mapped[str] = mapped_column(primary_key=True)
     first_name: Mapped[str]
     last_name: Mapped[Optional[str]]
     address: Mapped[Optional[str]]
@@ -23,10 +33,12 @@ class Friend(Base):
     receives_christmas_gift: Mapped[bool]
     receives_birthday_gift: Mapped[bool]
 
+class GiftIdeaAPI(BaseModel):
+    pass
+@create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
 class GiftIdea(Base):
     __tablename__ = "gift_idea"
-    id: Mapped[str] = mapped_column(primary_key=True)
-    friend_id: Mapped[str]
+    friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
     name: Mapped[str]
     description: Mapped[Optional[str]]
     url: Mapped[Optional[str]]
@@ -34,16 +46,32 @@ class GiftIdea(Base):
     done: Mapped[bool]
     done_at: Mapped[Optional[datetime]]
 
-class Contact(Base):
-    __tablename__ = "contact"
-    id: Mapped[str] = mapped_column(primary_key=True)
-    friend_id: Mapped[str]
-    date: Mapped[datetime]
-    via_telephone: Mapped[bool]
-    via_email: Mapped[bool]
-    via_messenger: Mapped[bool]
-    in_person: Mapped[bool]
+class InteractionViaType(EnumClass):
+    telephone = 'telephone'
+    email = 'email'
+    messenger = 'messenger'
+    in_person = 'in_person'
 
+class InteractionLogAPI(BaseModel):
+    pass
+@create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
+class InteractionLog(Base):
+    __tablename__ = "interaction_log"
+    friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
+    date: Mapped[datetime]
+    via: Mapped[InteractionViaType] = mapped_column(type_=EnumDB(InteractionViaType))
+    talking_points: Mapped[Optional[str]]
+    ask_again: Mapped[bool]
+
+class ImportantEventAPI(BaseModel):
+    pass
+@create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
+class ImportantEvent(Base):
+    __tablename__ = "important_event"
+    friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
+    date: Mapped[datetime]
+    name: Mapped[str]
+    description: Mapped[Optional[str]]
 
 
 
