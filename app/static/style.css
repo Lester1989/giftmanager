@@ -696,6 +696,10 @@ video {
           appearance: none;
   border-radius: 0.25rem;
   border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(79 70 229 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(148 163 184 / var(--tw-bg-opacity));
   padding: 0.75rem;
   line-height: 1.25;
   --tw-text-opacity: 1;
@@ -723,6 +727,7 @@ video {
 }
 
 .form-radio {
+  margin-inline-end: 0.5rem;
   height: 1rem;
   width: 1rem;
   --tw-border-opacity: 1;
@@ -790,6 +795,10 @@ video {
 
 .ms-2 {
   margin-inline-start: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
 }
 
 .block {
@@ -883,6 +892,10 @@ video {
 
 .items-center {
   align-items: center;
+}
+
+.items-stretch {
+  align-items: stretch;
 }
 
 .justify-start {
@@ -1009,6 +1022,10 @@ video {
 
 .p-3 {
   padding: 0.75rem;
+}
+
+.p-4 {
+  padding: 1rem;
 }
 
 .px-12 {
@@ -1155,6 +1172,10 @@ video {
 
 .no-underline {
   text-decoration-line: none;
+}
+
+.opacity-50 {
+  opacity: 0.5;
 }
 
 .opacity-75 {

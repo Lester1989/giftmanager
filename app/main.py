@@ -1,11 +1,11 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 from fastapi import FastAPI, Form,Request,status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import os
-from app.models import Friend, GiftIdea,InteractionLogAPI,InteractionViaType
+from app.models import Friend, GiftIdea,InteractionLogAPI,InteractionViaType,InteractionLog,ImportantEvent
 from fastapi import FastAPI, HTTPException
 from fastapi_sqlalchemy import DBSessionMiddleware  # middleware helper
 from fastapi_sqlalchemy import db  # an object to provide global access to a database session
@@ -55,23 +55,64 @@ def delete_friend(request: Request, friend_id: str):
 @app.get("/friends/{friend_id}", response_class=HTMLResponse)
 def get_friend(request: Request, friend_id: str):
     if friend := db.session.query(Friend).get(friend_id):
+        friend:Friend = friend # type hinting
+        gift_ideas = db.session.query(GiftIdea).filter(GiftIdea.friend_id == friend.id).all() or [
+                        GiftIdea(
+                            friend_id=friend.id,
+                            name="Item 1",
+                            description="bla bla bla",
+                            url="",
+                            price=0.0,
+                            done=False,
+                            done_at=datetime.now()),
+                        GiftIdea(
+                            friend_id=friend.id,
+                            name="Item 2",
+                            description="blib blib blib",
+                            url="",
+                            price=0.0,
+                            done=True,
+                            done_at=datetime.now())
+                            ]
+        interactions = db.session.query(InteractionLog).filter(InteractionLog.friend_id == friend.id).all() or [
+                        InteractionLog(
+                            friend_id=friend.id,
+                            date=datetime.now(),
+                            via=InteractionViaType.telephone,
+                            talking_points="bla bla",
+                            ask_again=True),
+                        InteractionLog(
+                            friend_id=friend.id,
+                            date=datetime.now(),
+                            via=InteractionViaType.email,
+                            talking_points="blub blub",
+                            ask_again=False),
+                            ]
+        important_events = db.session.query(ImportantEvent).filter(ImportantEvent.friend_id == friend.id).all() or [
+                        ImportantEvent(
+                            friend_id=friend.id,
+                            date=datetime.now(),
+                            name="bla bla",
+                            description="bla bla"),
+                        ImportantEvent(
+                            friend_id=friend.id,
+                            date=datetime.now()+timedelta(days=1),
+                            name="bla bla",
+                            description="bla bla"),
+                            ]
         return templates.TemplateResponse(
-            "friend_detail.html", 
+            "friend_detail.html",
             {
-                "request": request, 
-                "friend": friend, 
+                "request": request,
+                "friend": friend,
                 "InteractionViaType": InteractionViaType,
-                "interactions": [
-                    InteractionLogAPI(
-                        friend_id=friend_id,
-                        date=datetime.now(),
-                        via=InteractionViaType.telephone,
-                        talking_points="bla bla",
-                        ask_again=True)
-                        ]})
+                "interactions": interactions,
+                "gift_ideas": gift_ideas,
+                'important_events': important_events,
+            })
     else:
         raise HTTPException(status_code=404, detail="Friend not found")
-    
+
 @app.get("/new_interaction/{friend_id}", response_class=HTMLResponse)
 def new_interaction(request: Request, friend_id: str):
     if friend := db.session.query(Friend).get(friend_id):

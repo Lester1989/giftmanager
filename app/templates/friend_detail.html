@@ -7,43 +7,61 @@
         <h1 class="text-2xl font-bold mb-4">{{ friend.first_name }} {{ friend.last_name }}</h1>
         <h2 class="text-xl font-bold mb-4">Letzte Interaktionen</h2>
         <div class="flex flex-row flex-wrap gap-4">
-            <a href="/new_interaction/{{friend.id}}"
-                class="w-32 h-32 border-purple-800 hover:border-purple-500 border-4 rounded-lg text-9xl text-center hover:text-indigo-300">+</a>
+            <a href="/new_interaction/{{friend.id}}" class="w-32 h-32 border-purple-800 hover:border-purple-500 border-4 rounded-lg text-9xl text-center hover:text-indigo-300">+</a>
             {% for interaction in interactions %}
             <div class="w-32 h-32 border-purple-800 hover:border-purple-500 border-4 rounded-lg relative {% if interaction.ask_again %} animate-pulse {% endif %}">
-            <div class="absolute w-full h-full text-gray-800 -z-10">
-            {% if interaction.via == InteractionViaType.email %}
-            {{ icons.email("w-full h-full") }}
-            {% elif interaction.via == InteractionViaType.telephone %}
-            {{ icons.telephone("w-full h-full") }}
-            {% elif interaction.via == InteractionViaType.messenger %}
-            {{ icons.messenger("w-full h-full") }}
-            {% elif interaction.via == InteractionViaType.in_person %}
-            {{ icons.in_person("w-full h-full") }}
-            {% else %}
-            {{ icons.missing("w-full h-full") }}
-            {% endif %}
-            </div>
-            <div class="absolute top-0 px-2 py-1 text-center w-full">
-            {{ interaction.date.strftime("%d.%m.%Y") }}
-            </div>
-            <div class="absolute top-6 px-2 py-1 text-center w-full text-wrap h-full overflow-clip">
-            {{ interaction.talking_points}}
-            </div>
+                <div class="absolute w-full h-full text-gray-800 -z-10">
+                    {% if interaction.via == InteractionViaType.email %}
+                    {{ icons.email("w-full h-full") }}
+                    {% elif interaction.via == InteractionViaType.telephone %}
+                    {{ icons.telephone("w-full h-full") }}
+                    {% elif interaction.via == InteractionViaType.messenger %}
+                    {{ icons.messenger("w-full h-full") }}
+                    {% elif interaction.via == InteractionViaType.in_person %}
+                    {{ icons.in_person("w-full h-full") }}
+                    {% else %}
+                    {{ icons.missing("w-full h-full") }}
+                    {% endif %}
+                </div>
+                <div class="absolute top-0 px-2 py-1 text-center w-full">
+                    {{ interaction.date.strftime("%d.%m.%Y") }}
+                </div>
+                <div class="absolute top-6 px-2 py-1 text-center w-full text-wrap h-full overflow-clip">
+                    {{ interaction.talking_points}}
+                </div>
             </div>
             {% endfor %}
         </div>
         <h2 class="text-xl font-bold mb-4">Geschenkideen</h2>
         <div class="flex flex-row flex-wrap gap-4">
-            <a href="/todo"
-                class="w-32 h-32 border-green-800 hover:border-green-500 border-4 rounded-lg text-9xl text-center hover:text-indigo-300">+</a>
-            <div class="w-32 h-32 border-green-800 hover:border-green-500 border-4 rounded-lg"></div>
+            <a href="#" class="w-32 h-32 border-green-800 hover:border-green-500 border-4 rounded-lg text-9xl text-center hover:text-indigo-300">+</a>
+            {% for gift in gift_ideas %}
+            <div class="w-32 h-32 border-green-800 hover:border-green-500 border-4 rounded-lg flex flex-col p-4 {% if gift.done %} text-gray-500 opacity-50 {% endif %}">
+                <div class="text-center w-full">
+                    {{ gift.name }}
+                </div>
+                <div class="text-center text-wrap w-full">
+                    {{ gift.description}}
+                </div>
+            </div>
+            {% endfor %}
         </div>
         <h2 class="text-xl font-bold mb-4">nächste Events</h2>
         <div class="flex flex-row flex-wrap gap-4">
-            <a href="/todo"
-                class="w-32 h-32 border-indigo-900 hover:border-indigo-500 border-4 rounded-lg text-9xl text-center hover:text-indigo-300">+</a>
-            <div class="w-32 h-32 border-indigo-900 hover:border-indigo-500 border-4 rounded-lg"></div>
+            <a href="#" class="w-32 h-32 border-indigo-900 hover:border-indigo-500 border-4 rounded-lg text-9xl text-center hover:text-indigo-300">+</a>
+            {% for event in important_events %}
+            <div class="w-32 h-32 border-indigo-900 hover:border-indigo-500 border-4 rounded-lg flex flex-col p-4">
+                <div class="text-center w-full">
+                    {{ event.date.strftime("%d.%m.%Y") }}
+                </div>
+                <div class="text-center w-full">
+                    {{ event.name }}
+                </div>
+                <div class="text-center text-wrap w-full">
+                    {{ event.description}}
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
@@ -61,7 +79,8 @@
             </div>
             <div class="mb-4">
                 <label for="phone_number" class="block font-bold">Phone Number:</label>
-                <input class="form-field" type="text" id="phone_number" name="phone_number" value="{{ friend.phone_number }}">
+                <input class="form-field" type="text" id="phone_number" name="phone_number"
+                    value="{{ friend.phone_number }}">
             </div>
             <div class="mb-4">
                 <label for="email" class="block font-bold">Email:</label>
@@ -77,11 +96,13 @@
             </div>
             <div class="mb-4">
                 <label for="receives_christmas_gift" class="block font-bold">Receives Christmas Gift:</label>
-                <input type="checkbox" id="receives_christmas_gift" name="receives_christmas_gift" value="{{ friend.receives_christmas_gift }}">
+                <input type="checkbox" id="receives_christmas_gift" name="receives_christmas_gift"
+                    value="{{ friend.receives_christmas_gift }}">
             </div>
             <div class="mb-4">
                 <label for="receives_birthday_gift" class="block font-bold">Receives Birthday Gift:</label>
-                <input type="checkbox" id="receives_birthday_gift" name="receives_birthday_gift" value="{{ friend.receives_birthday_gift }}">
+                <input type="checkbox" id="receives_birthday_gift" name="receives_birthday_gift"
+                    value="{{ friend.receives_birthday_gift }}">
             </div>
             <button type="submit" class="btn-rainbow">Edit Friend</button>
         </form>
