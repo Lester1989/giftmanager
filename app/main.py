@@ -5,7 +5,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import os
-from app.models import Friend, GiftIdea,InteractionLogAPI,InteractionViaType,InteractionLog,ImportantEvent
+from app.models import Friend, GiftIdea,InteractionLogAPI,InteractionViaType,InteractionLog,ImportantEvent,TalkingPoint
 from fastapi import FastAPI, HTTPException
 from fastapi_sqlalchemy import DBSessionMiddleware  # middleware helper
 from fastapi_sqlalchemy import db  # an object to provide global access to a database session
@@ -60,19 +60,11 @@ def get_friend(request: Request, friend_id: str):
                         GiftIdea(
                             friend_id=friend.id,
                             name="Item 1",
-                            description="bla bla bla",
-                            url="",
-                            price=0.0,
-                            done=False,
-                            done_at=datetime.now()),
+                            done=False),
                         GiftIdea(
                             friend_id=friend.id,
                             name="Item 2",
-                            description="blib blib blib",
-                            url="",
-                            price=0.0,
-                            done=True,
-                            done_at=datetime.now())
+                            done=True)
                             ]
         interactions = db.session.query(InteractionLog).filter(InteractionLog.friend_id == friend.id).all() or [
                         InteractionLog(
@@ -116,6 +108,27 @@ def get_friend(request: Request, friend_id: str):
 @app.get("/new_interaction/{friend_id}", response_class=HTMLResponse)
 def new_interaction(request: Request, friend_id: str):
     if friend := db.session.query(Friend).get(friend_id):
+        friend:Friend = friend
+        important_events = db.session.query(ImportantEvent).filter(ImportantEvent.friend_id == friend.id).all() or [
+                        ImportantEvent(
+                            friend_id=friend.id,
+                            date=datetime.now(),
+                            name="bla bla",
+                            description="bla bla"),
+                        ImportantEvent(
+                            friend_id=friend.id,
+                            date=datetime.now()+timedelta(days=1),
+                            name="blab blaba",
+                            description="bla bla"),
+                            ]
+        talking_points = db.session.query(TalkingPoint).filter(TalkingPoint.friend_id == friend.id).all() or [
+                        TalkingPoint( friend_id=friend.id, point="bla bla"),
+                        TalkingPoint( friend_id=friend.id, point="bla bla"),
+                            ]
+        gift_ideas = db.session.query(GiftIdea).filter(GiftIdea.friend_id == friend.id).all() or [
+                        GiftIdea( friend_id=friend.id, name="Item 1", done=False),
+                        GiftIdea( friend_id=friend.id, name="Item 2", done=True)
+                            ]
         return templates.TemplateResponse(
             "new_interaction.html", 
             {
@@ -123,12 +136,9 @@ def new_interaction(request: Request, friend_id: str):
                 "friend": friend, 
                 "date": datetime.now().strftime("%Y-%m-%dT%H:%M"),
                 "InteractionViaType": InteractionViaType,
-                "talking_point_suggstions": [
-                    "Hobbies",
-                    "Kinder",
-                    "Beziehung",
-                    "berufliche Situation",
-                ]
+                "talking_point_suggstions": talking_points,
+                "gift_ideas": gift_ideas,
+                "important_events": important_events
             })
     else:
         raise HTTPException(status_code=404, detail="Friend not found")
@@ -139,6 +149,63 @@ def add_interaction(request: Request, friend_id: str, date: datetime = Form(date
     db.session.add(interaction)
     db.session.commit()
     return RedirectResponse(url=f'/friends/{friend_id}', status_code=status.HTTP_302_FOUND)
+
+@app.post("/add_gift_idea/{friend_id}", response_class=RedirectResponse)
+def add_gift_idea(request: Request, friend_id: str, new_gift_idea: str = Form("")):
+    gift_idea = GiftIdea(friend_id=friend_id, name=new_gift_idea, done=False)
+    db.session.add(gift_idea)
+    db.session.commit()
+    return RedirectResponse(url=f'/friends/{friend_id}', status_code=status.HTTP_302_FOUND)
+
+@app.get("/delete_gift_idea/{gift_idea_id}", response_class=RedirectResponse)
+def delete_gift_idea(request: Request, gift_idea_id: str):
+    gift_idea:GiftIdea = db.session.query(GiftIdea).get(gift_idea_id)
+    if not gift_idea:
+        raise HTTPException(status_code=404, detail="Gift Idea not found")
+    db.session.delete(gift_idea)
+    db.session.commit()
+    return RedirectResponse(url=f'/friends/{gift_idea.friend_id}', status_code=status.HTTP_302_FOUND)
+
+@app.get("/complete_gift_idea/{gift_idea_id}", response_class=RedirectResponse)
+def complete_gift_idea(request: Request, gift_idea_id: str):
+    gift_idea:GiftIdea = db.session.query(GiftIdea).get(gift_idea_id)
+    if not gift_idea:
+        raise HTTPException(status_code=404, detail="Gift Idea not found")
+    gift_idea.done = True
+    db.session.commit()
+    return RedirectResponse(url=f'/friends/{gift_idea.friend_id}', status_code=status.HTTP_302_FOUND)
+
+@app.post("/add_important_event/{friend_id}", response_class=RedirectResponse)
+def add_important_event(request: Request, friend_id: str, new_important_event_date: datetime = Form(datetime.now()), new_important_event: str = Form(""), new_important_event_details: str = Form("")):
+    important_event = ImportantEvent(friend_id=friend_id, date=new_important_event_date, name=new_important_event, description=new_important_event_details)
+    db.session.add(important_event)
+    db.session.commit()
+    return RedirectResponse(url=f'/friends/{friend_id}', status_code=status.HTTP_302_FOUND)
+
+@app.get("/delete_important_event/{important_event_id}", response_class=RedirectResponse)
+def delete_important_event(request: Request, important_event_id: str):
+    important_event:ImportantEvent = db.session.query(ImportantEvent).get(important_event_id)
+    if not important_event:
+        raise HTTPException(status_code=404, detail="Important Event not found")
+    db.session.delete(important_event)
+    db.session.commit()
+    return RedirectResponse(url=f'/friends/{important_event.friend_id}', status_code=status.HTTP_302_FOUND)
+
+@app.post("/add_talking_point/{friend_id}", response_class=RedirectResponse)
+def add_talking_point(request: Request, friend_id: str, new_talking_point: str = Form("")):
+    talking_point = TalkingPoint(friend_id=friend_id, point=new_talking_point)
+    db.session.add(talking_point)
+    db.session.commit()
+    return RedirectResponse(url=f'/friends/{friend_id}', status_code=status.HTTP_302_FOUND)
+
+@app.get("/delete_talking_point/{talking_point_id}", response_class=RedirectResponse)
+def delete_talking_point(request: Request, talking_point_id: str):
+    talking_point:TalkingPoint = db.session.query(TalkingPoint).get(talking_point_id)
+    if not talking_point:
+        raise HTTPException(status_code=404, detail="Talking Point not found")
+    db.session.delete(talking_point)
+    db.session.commit()
+    return RedirectResponse(url=f'/friends/{talking_point.friend_id}', status_code=status.HTTP_302_FOUND)
 
 @app.get("/calendar", response_class=HTMLResponse)
 def get_calendar(request: Request):
