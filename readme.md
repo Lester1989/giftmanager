@@ -25,7 +25,9 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [X] use create form
 - [ ] add contact (whatsapp, facebook, call, mailto) links for friends
 - [ ] add social media links for friends
-- [ ] add talkingpoints to friends
+- [X] add talkingpoints to friends
 - [ ] create calendar view
 - [ ] hide/show chips
 - [ ] make landing page suggest to contact friend about a topic
+- [ ] filter events by time
+- [ ] add login to system

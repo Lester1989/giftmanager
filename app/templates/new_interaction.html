@@ -1,4 +1,7 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+
+{% import 'icons.j2' as icons %}
+{% block content %}
 
 <div class="flex flex-col w-full xl:w-2/5 justify-start lg:items-start overflow-y-hidden" >
     <div class="bg-gray-900 opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4" >
@@ -49,9 +52,60 @@
     <h2 class="text-xl font-bold mb-4">Possible Topics</h2>
     <ul>
       {% for suggestion in talking_point_suggstions %}
-      <li>{{ suggestion }}</li>
+      <li>
+      {{ suggestion.point }}
+      <a href="/delete_talking_point/{{suggestion.id}}">X</a>
+      </li>
       {% endfor %}
     </ul>
+    <form action="/add_talking_point/{{friend.id}}" method="post">
+      <div class="flex flex-col items-stretch w-full">
+        <label for="new_talking_point" class="block font-bold" >New Suggestion</label >
+        <input class="form-field" type="text" name="new_talking_point" id="new_talking_point" />
+      </div>
+      <button type="submit" class="btn-rainbow">Add Suggestion</button>
+    </form>
+    <h2 class="text-xl font-bold mb-4">Gift Ideas</h2>
+    <ul>
+      {% for gift_idea in gift_ideas %}
+      <li>
+    <a href="/complete_gift_idea/{{gift_idea.id}}">{{ icons.check() }}</a>     
+      {{ gift_idea.name }}
+      <a href="/delete_gift_idea/{{gift_idea.id}}">X</a>
+      </li>
+      {% endfor %}
+    </ul>
+    <form action="/add_gift_idea/{{friend.id}}" method="post">
+      <div class="flex flex-col items-stretch w-full">
+        <label for="new_gift_idea" class="block font-bold" >New Gift Idea</label >
+        <input class="form-field" type="text" name="new_gift_idea" id="new_gift_idea" />
+      </div>
+      <button type="submit" class="btn-rainbow">Add Gift Idea</button>
+    </form>
+    <h2 class="text-xl font-bold mb-4">Important Events</h2>
+    <ul>
+      {% for important_event in important_events %}
+      <li>
+      {{ important_event }}
+      <a href="/delete_important_event/{{important_event.id}}">X</a>
+      </li>
+      {% endfor %}
+    </ul> 
+    <form action="/add_important_event/{{friend.id}}" method="post">
+      <div class="flex flex-col items-stretch w-full">
+        <label for="new_important_event" class="block font-bold" >New Important Event</label >
+        <input class="form-field" type="text" name="new_important_event" id="new_important_event" />
+      </div>
+        <div class="flex flex-col items-stretch w-full">
+            <label for="new_important_event_date" class="block font-bold" >Date</label >
+            <input class="form-field" type="date" name="new_important_event_date" id="new_important_event_date" />
+        </div>
+      <div class="flex flex-col items-stretch w-full">
+        <label for="new_important_event_details" class="block font-bold" >Details</label >
+        <textarea class="form-field" type="text" name="new_important_event_details" id="new_important_event_details"></textarea>
+      </div>
+      <button type="submit" class="btn-rainbow">Add Important Event</button>
+    </form>
   </div>
 </div>
 {% endblock %}

@@ -40,11 +40,7 @@ class GiftIdea(Base):
     __tablename__ = "gift_idea"
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
     name: Mapped[str]
-    description: Mapped[Optional[str]]
-    url: Mapped[Optional[str]]
-    price: Mapped[Optional[float]]
     done: Mapped[bool]
-    done_at: Mapped[Optional[datetime]]
 
 class InteractionViaType(EnumClass):
     telephone = 'telephone'
@@ -73,5 +69,13 @@ class ImportantEvent(Base):
     name: Mapped[str]
     description: Mapped[Optional[str]]
 
+class TalkingPointAPI(BaseModel):
+    pass
+@create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
+class TalkingPoint(Base):
+    __tablename__ = "talking_point"
+    friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
+    point: Mapped[str]
+    
 
 
