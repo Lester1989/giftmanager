@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="flex flex-col w-full xl:w-2/5 justify-start lg:items-start overflow-y-hidden" >
-    <div class="bg-gray-900 opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4" >
+    <div class="panel" >
     
         <h1 class="text-2xl font-bold mb-4">New Interaction with {{ friend.first_name }}</h1>
     <form action="/add_interaction/{{friend.id}}" method="post">
@@ -42,7 +42,7 @@
 
 </div>
 <div class="w-full xl:w-3/5 px-12 overflow-hidden">
-    <div class="bg-gray-900 opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4" >
+    <div class="panel" >
 
     <div class="flex flex-col items-stretch w-full">
       <label for="notes" class="block font-bold" >Notes for {{ friend.first_name }}</label >
@@ -52,9 +52,9 @@
     <h2 class="text-xl font-bold mb-4">Possible Topics</h2>
     <ul>
       {% for suggestion in talking_point_suggstions %}
-      <li>
+      <li class="mb-2">
       {{ suggestion.point }}
-      <a href="/delete_talking_point/{{suggestion.id}}">X</a>
+      <a class="rounded-full border-primary-100 p-0 w-9 h-9 border-2" href="/delete_talking_point/{{suggestion.id}}">{{ icons.x_mark("inline w-6 h-6") }}</a>
       </li>
       {% endfor %}
     </ul>
@@ -63,15 +63,15 @@
         <label for="new_talking_point" class="block font-bold" >New Suggestion</label >
         <input class="form-field" type="text" name="new_talking_point" id="new_talking_point" />
       </div>
-      <button type="submit" class="btn-rainbow">Add Suggestion</button>
+      <button type="submit" class="btn-rainbow mt-2">Add Suggestion</button>
     </form>
     <h2 class="text-xl font-bold mb-4">Gift Ideas</h2>
     <ul>
       {% for gift_idea in gift_ideas %}
-      <li>
-    <a href="/complete_gift_idea/{{gift_idea.id}}">{{ icons.check() }}</a>     
+      <li class="mb-2">
+    <a class="rounded-full border-primary-100 p-0 w-9 h-9 border-2" href="/complete_gift_idea/{{gift_idea.id}}">{{ icons.check("inline w-6 h-6") }}</a>
       {{ gift_idea.name }}
-      <a href="/delete_gift_idea/{{gift_idea.id}}">X</a>
+      <a class="rounded-full border-primary-100 p-0 w-9 h-9 border-2" href="/delete_gift_idea/{{gift_idea.id}}">{{ icons.x_mark("inline w-6 h-6") }}</a>
       </li>
       {% endfor %}
     </ul>
@@ -80,17 +80,17 @@
         <label for="new_gift_idea" class="block font-bold" >New Gift Idea</label >
         <input class="form-field" type="text" name="new_gift_idea" id="new_gift_idea" />
       </div>
-      <button type="submit" class="btn-rainbow">Add Gift Idea</button>
+      <button type="submit" class="btn-rainbow mt-2">Add Gift Idea</button>
     </form>
     <h2 class="text-xl font-bold mb-4">Important Events</h2>
     <ul>
       {% for important_event in important_events %}
-      <li>
-      {{ important_event }}
-      <a href="/delete_important_event/{{important_event.id}}">X</a>
+      <li class="mb-2">
+      {{ important_event.name }} ({{ important_event.date }})
+      <a class="rounded-full border-primary-100 p-0 w-9 h-9 border-2" href="/delete_important_event/{{important_event.id}}">{{ icons.x_mark("inline w-6 h-6") }}</a>
       </li>
       {% endfor %}
-    </ul> 
+    </ul>
     <form action="/add_important_event/{{friend.id}}" method="post">
       <div class="flex flex-col items-stretch w-full">
         <label for="new_important_event" class="block font-bold" >New Important Event</label >
@@ -104,7 +104,7 @@
         <label for="new_important_event_details" class="block font-bold" >Details</label >
         <textarea class="form-field" type="text" name="new_important_event_details" id="new_important_event_details"></textarea>
       </div>
-      <button type="submit" class="btn-rainbow">Add Important Event</button>
+      <button type="submit" class="btn-rainbow mt-2">Add Important Event</button>
     </form>
   </div>
 </div>

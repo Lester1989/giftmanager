@@ -17,17 +17,23 @@ If you make changes to the database, you need to run `alembic revision --autogen
 # Open TODOs
 
 - [ ] add tests
-- [ ] dockerize
+- [X] dockerize
 - [ ] Authentication
-- [ ] create detail views
-- [ ] create edit views
+- [X] create friend detail views
+- [X] create friend edit views
 - [X] create delete routes
 - [X] use create form
 - [ ] add contact (whatsapp, facebook, call, mailto) links for friends
-- [ ] add social media links for friends
 - [X] add talkingpoints to friends
-- [ ] create calendar view
+- [X] create calendar view
+- [ ] use calendar icons for events
+- [ ] add event creation
+- [ ] add gift creation
 - [ ] hide/show chips
 - [ ] make landing page suggest to contact friend about a topic
 - [ ] filter events by time
 - [ ] add login to system
+- [ ] add settings page
+- [ ] add settings for time thresolds
+- [ ] add registration and add registration emails
+- [ ] add DEMO mode

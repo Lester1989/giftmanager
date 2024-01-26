@@ -1,5 +1,5 @@
 from sqlalchemy.orm import DeclarativeBase
-from datetime import datetime
+from datetime import datetime,date
 from typing import List
 from typing import Optional
 from sqlalchemy.orm import Mapped
@@ -65,9 +65,18 @@ class ImportantEventAPI(BaseModel):
 class ImportantEvent(Base):
     __tablename__ = "important_event"
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
-    date: Mapped[datetime]
+    date: Mapped[date]
     name: Mapped[str]
     description: Mapped[Optional[str]]
+
+    @property
+    def is_upcoming(self):
+        return self.date > date.today()
+
+    @property
+    def days_until(self):
+        return (self.date - date.today()).days
+
 
 class TalkingPointAPI(BaseModel):
     pass

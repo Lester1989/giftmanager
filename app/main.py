@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,date
 from typing import Optional
 from fastapi import FastAPI, Form,Request,status
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -142,7 +142,7 @@ def new_interaction(request: Request, friend_id: str):
             })
     else:
         raise HTTPException(status_code=404, detail="Friend not found")
-    
+
 @app.post("/add_interaction/{friend_id}", response_class=RedirectResponse)
 def add_interaction(request: Request, friend_id: str, date: datetime = Form(datetime.now()), via: InteractionViaType = Form(InteractionViaType.telephone), talking_points: str = Form(""), ask_again: bool = Form(False)):
     interaction = InteractionLogAPI(friend_id=friend_id, date=date, via=via, talking_points=talking_points, ask_again=ask_again)
@@ -176,7 +176,7 @@ def complete_gift_idea(request: Request, gift_idea_id: str):
     return RedirectResponse(url=f'/friends/{gift_idea.friend_id}', status_code=status.HTTP_302_FOUND)
 
 @app.post("/add_important_event/{friend_id}", response_class=RedirectResponse)
-def add_important_event(request: Request, friend_id: str, new_important_event_date: datetime = Form(datetime.now()), new_important_event: str = Form(""), new_important_event_details: str = Form("")):
+def add_important_event(request: Request, friend_id: str, new_important_event_date: date = Form(date.today()), new_important_event: str = Form(""), new_important_event_details: str = Form("")):
     important_event = ImportantEvent(friend_id=friend_id, date=new_important_event_date, name=new_important_event, description=new_important_event_details)
     db.session.add(important_event)
     db.session.commit()
@@ -209,7 +209,12 @@ def delete_talking_point(request: Request, talking_point_id: str):
 
 @app.get("/calendar", response_class=HTMLResponse)
 def get_calendar(request: Request):
-    return templates.TemplateResponse("calendar.html", {"request": request})
+    friend_names = {
+        friend.id: f"{friend.first_name} {friend.last_name}"
+        for friend in db.session.query(Friend).all()
+    }
+    important_events = db.session.query(ImportantEvent).all()
+    return templates.TemplateResponse("calendar.html", {"request": request, "important_events": important_events, "friend_names": friend_names})
 
 
 

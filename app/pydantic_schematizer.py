@@ -7,10 +7,10 @@ def create_pydantic(namespace:dict=None,suffix:str='API',default_type:type=str):
         namespace = globals()
     def create_pydantic_inner(original_class):
         def _filter_for_no_default(n,val):
-            return not n.startswith('_') and ('default' not in val.__dict__ or not val.default)
+            return not n.startswith('_') and not isinstance(val,property) and ('default' not in val.__dict__ or not val.default)
 
         def _filter_for_default(n,val):
-            return not n.startswith('_') and (val.primary_key or ('default'  in val.__dict__ and val.default))
+            return not n.startswith('_') and not isinstance(val,property) and (val.primary_key or ('default'  in val.__dict__ and val.default))
 
         def _get_attribute_type(attribute_name: str):
             annotation = original_class.__annotations__.get(attribute_name, None)
