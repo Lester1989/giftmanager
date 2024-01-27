@@ -19,6 +19,9 @@ httpx = "^0.26.0"
 pytailwindcss = "^0.2.0"
 python-multipart = "^0.0.6"
 psycopg2 = "^2.9.9"
+resend = "^0.7.2"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 
 [build-system]

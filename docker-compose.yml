@@ -9,6 +9,8 @@ services:
     restart: unless-stopped
     environment:
       - CONNECTIONSTRING=postgresql+psycopg2://friendshipmanager:friendshipmanager@postgres:5432/friendshipmanager
+      - RESEND_API_KEY=INSERT_API_KEY_HERE
+      - RESEND_DOMAIN=friendship.lesterserver.de
     command: sh -c "alembic upgrade head && uvicorn app.main:app --port 8800 --host 0.0.0.0"
     ports:
       - 8800:8800

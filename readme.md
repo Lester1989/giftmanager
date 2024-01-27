@@ -32,8 +32,9 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [ ] hide/show chips
 - [ ] make landing page suggest to contact friend about a topic
 - [ ] filter events by time
-- [ ] add login to system
+- [X] add login to DB
+- [ ] connect login to system
 - [ ] add settings page
 - [ ] add settings for time thresolds
-- [ ] add registration and add registration emails
+- [ ] WIP add registration and add registration emails
 - [ ] add DEMO mode

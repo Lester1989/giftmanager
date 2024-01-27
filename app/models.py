@@ -7,7 +7,7 @@ from sqlalchemy.orm import mapped_column
 from app.pydantic_schematizer import create_pydantic,BaseModel
 from enum import Enum as EnumClass
 from sqlalchemy import Enum as EnumDB
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID,JSONB
 import uuid
 from ulid import new as new_ulid
 
@@ -17,6 +17,32 @@ def new_uuid():
 class Base(DeclarativeBase):
     __table_args__ = {'schema': 'public'}
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True,default=new_uuid,type_=UUID(as_uuid=True))
+
+class UserRegistration(Base):
+    __tablename__ = "user_registration"
+    registration_id: Mapped[str] # hashed
+    email: Mapped[str]
+
+class UserPasswordReset(Base):
+    __tablename__ = "user_password_reset"
+    reset_id: Mapped[str] # hashed
+    email: Mapped[str]
+
+class UserAPI(BaseModel):
+    pass
+
+@create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
+class User(Base):
+    __tablename__ = "user"
+    email: Mapped[str]
+    password_hash: Mapped[str] # hashed
+    settings: Mapped[dict] = mapped_column(type_=JSONB,server_default='{}')
+    is_activated: Mapped[bool] = mapped_column(default=False)
+
+class UserFriend(Base):
+    __tablename__ = "user_friend"
+    login_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True),primary_key=True)
+    friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True),primary_key=True)
 
 class FriendAPI(BaseModel):
     pass
