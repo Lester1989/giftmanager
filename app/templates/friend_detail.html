@@ -34,7 +34,7 @@
         </div>
         <h2 class="text-xl font-bold mb-4">Geschenkideen</h2>
         <div class="flex flex-row flex-wrap gap-4">
-            <a href="#" class="w-32 h-32 border-tertiary-900 hover:border-tertiary-500 border-4 rounded-lg text-9xl text-center hover:text-primary-300">+</a>
+            <a href="/new_gift_idea?friend_id={{friend.id}}" class="w-32 h-32 border-tertiary-900 hover:border-tertiary-500 border-4 rounded-lg text-9xl text-center hover:text-primary-300">+</a>
             {% for gift in gift_ideas %}
             <div class="w-32 h-32 border-tertiary-900 hover:border-tertiary-500 border-4 rounded-lg flex flex-col p-4 {% if gift.done %} text-gray-500 opacity-50 {% endif %}">
                 <div class="text-center w-full">
@@ -48,7 +48,7 @@
         </div>
         <h2 class="text-xl font-bold mb-4">nächste Events</h2>
         <div class="flex flex-row flex-wrap gap-4">
-            <a href="#" class="w-32 h-32 border-primary-900 hover:border-primary-500 border-4 rounded-lg text-9xl text-center hover:text-primary-300">+</a>
+            <a href="/new_important_event?friend_id={{friend.id}}" class="w-32 h-32 border-primary-900 hover:border-primary-500 border-4 rounded-lg text-9xl text-center hover:text-primary-300">+</a>
             {% for event in important_events %}
             <div class="w-32 h-32 border-primary-900 hover:border-primary-500 border-4 rounded-lg flex flex-col p-4">
                 <div class="text-center w-full">

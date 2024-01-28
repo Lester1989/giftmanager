@@ -18,7 +18,7 @@ If you make changes to the database, you need to run `alembic revision --autogen
 
 - [ ] add tests
 - [X] dockerize
-- [ ] Authentication
+- [X] Authentication
 - [X] create friend detail views
 - [X] create friend edit views
 - [X] create delete routes
@@ -27,21 +27,21 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [X] add talkingpoints to friends
 - [X] create calendar view
 - [ ] use calendar icons for events
-- [ ] add event creation
-- [ ] add gift creation
+- [X] add event creation
+- [X] add gift creation
 - [ ] hide/show chips
 - [ ] make landing page suggest to contact friend about a topic
 - [ ] filter events by time
 - [X] add login to DB
-- [ ] connect login to system
+- [X] connect login to system
 - [ ] add settings page
 - [ ] add settings for time thresolds
-- [ ] WIP add registration and add registration emails
+- [X] WIP add registration and add registration emails
 - [ ] add DEMO mode
 
 # Pending Refactorings and Maintenance
 
-- [ ] apply SRP and create routers for each view
+- [X] apply SRP and create routers for each view
 - [ ] create a service layer for the database
 - [ ] create more tests
 - [ ] add logging

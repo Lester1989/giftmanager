@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block content %}
+<div class="w-1/2">
+  <div class="panel">
+    <h1 class="text-2xl font-bold mb-4">Create a Gift Idea for {{ friend.first_name }}</h1>
+    <form class="max-w-sm mx-auto" action="/add_gift_idea/{{friend.id}}" method="post">
+      <div class="mb-4">
+        <label for="new_gift_idea" class="block font-bold" >New Gift Idea</label >
+        <input class="form-field" type="text" name="new_gift_idea" id="new_gift_idea" />
+      </div>
+      <button type="submit" class="btn-rainbow">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

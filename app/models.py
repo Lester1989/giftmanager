@@ -20,12 +20,10 @@ class Base(DeclarativeBase):
 
 class UserRegistration(Base):
     __tablename__ = "user_registration"
-    registration_id: Mapped[str] # hashed
     email: Mapped[str]
 
 class UserPasswordReset(Base):
     __tablename__ = "user_password_reset"
-    reset_id: Mapped[str] # hashed
     email: Mapped[str]
 
 class UserAPI(BaseModel):
