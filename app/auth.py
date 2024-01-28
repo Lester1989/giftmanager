@@ -20,7 +20,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from typing import Annotated,Optional,Dict
-from app.models import User,UserStatus
+from app.models import User
 from fastapi import Body
 from uuid import UUID
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
