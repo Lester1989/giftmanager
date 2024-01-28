@@ -12,13 +12,13 @@ from fastapi_sqlalchemy import db  # an object to provide global access to a dat
 from ulid import new as new_ulid
 from app.router_api import app as api
 from app.mail_sending import send_test_email
+from app.template_loading import templates
 
 
 app = FastAPI()
 app.add_middleware(DBSessionMiddleware, db_url=os.getenv('CONNECTIONSTRING',"sqlite:///app.db"))
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
-templates = Jinja2Templates(directory="app/templates")
 app.include_router(api)
 
 @app.get("/", response_class=RedirectResponse)

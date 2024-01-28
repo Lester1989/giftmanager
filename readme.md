@@ -38,3 +38,11 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [ ] add settings for time thresolds
 - [ ] WIP add registration and add registration emails
 - [ ] add DEMO mode
+
+# Pending Refactorings and Maintenance
+
+- [ ] apply SRP and create routers for each view
+- [ ] create a service layer for the database
+- [ ] create more tests
+- [ ] add logging
+- [ ] add error handling

@@ -1,3 +1,4 @@
+import asyncio
 import os
 import random
 import string
@@ -79,6 +80,9 @@ oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="token")
 
 
 app = APIRouter()
+
+async def fake_delay():
+    await asyncio.sleep(random.random() * 3)
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
