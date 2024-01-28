@@ -11,7 +11,7 @@ from fastapi_sqlalchemy import DBSessionMiddleware  # middleware helper
 from fastapi_sqlalchemy import db  # an object to provide global access to a database session
 from ulid import new as new_ulid
 from app.router_api import app as api
-from app.mail_sending import send_email
+from app.mail_sending import send_test_email
 
 
 app = FastAPI()
@@ -37,7 +37,7 @@ def get_friends(request: Request):
 
 @app.get("/test_mail")
 def test_mail(request: Request):
-    response = send_email()
+    response = send_test_email()
     return str(response)
 
 @app.post("/add_friend", response_class=RedirectResponse)
