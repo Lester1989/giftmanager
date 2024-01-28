@@ -234,3 +234,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,python,visualstudiocode,windows
+release_with_hook.ps1

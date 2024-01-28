@@ -58,10 +58,8 @@ docker push lukasjaspaert/$versionTag
 docker push lukasjaspaert/$versionTagLatest
 Write-Host "Deployment completed successfully! $versionTag is now available on the registry, rebuilding the stack"
 
+Invoke-RestMethod -Uri INSERT_PORTAINER_HOOK -Method POST
 
-exit 0
-# TODO activate hook and check after first build
-# Invoke-RestMethod -Uri COMING_SOON -Method POST
 
 Write-Host "Stack rebuild triggered successfully! Checking availablity of the new version"
 
