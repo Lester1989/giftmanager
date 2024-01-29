@@ -6,6 +6,7 @@ from ulid import new as new_ulid
 from app.models import User,UserRegistration,UserPasswordReset
 from app.template_loading import templates
 import app.auth as auth
+from app.mail_sending import send_registration_mail,send_password_reset_mail
 
 app = APIRouter()
 
@@ -52,6 +53,7 @@ async def register_post(request: Request):
         # add delay to prevent timing attack
         await auth.fake_delay()
         raise HTTPException(status_code=400, detail="User already exists, please use passwort reset")
+    # TODO Send Mail
     db.session.add(User(email=email,password_hash=auth.get_password_hash(password)))
     db.session.add(UserRegistration(email=email))
     db.session.commit()
@@ -81,6 +83,8 @@ async def password_reset_post(request: Request):
     if db_user:= db.session.query(User).filter(User.email == email).first():
         db.session.add(UserPasswordReset(email=email))
         db.session.commit()
+        # TODO Send Mail
+
     return templates.TemplateResponse("login.html", {"request": request})
 
 @app.get("/password_reset/{reset_id}/{user_id}", response_class=HTMLResponse)
