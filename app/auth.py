@@ -17,7 +17,6 @@ from datetime import datetime, timedelta, timezone
 from fastapi import Depends, FastAPI, HTTPException, status,Request
 from fastapi.security import OAuth2, OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 from pydantic import BaseModel
 from typing import Annotated,Optional,Dict
 from app.models import User
@@ -26,6 +25,19 @@ from uuid import UUID
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
 from fastapi import Request
 from fastapi.security.utils import get_authorization_scheme_param
+import bcrypt
+
+# Hash a password using bcrypt
+def hash_password(password):
+    pwd_bytes = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
+    return hashed_password
+
+# Check if the provided password matches the stored password (hashed)
+def verify_password(plain_password, hashed_password):
+    password_byte_enc = plain_password.encode('utf-8')
+    return bcrypt.checkpw(password = password_byte_enc , hashed_password = hashed_password)
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 180
@@ -45,7 +57,6 @@ class UserRequest(BaseModel):
 class NotAuthenticatedException(Exception):
     pass
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class OAuth2PasswordBearerWithCookie(OAuth2):
@@ -85,11 +96,11 @@ async def fake_delay():
     await asyncio.sleep(random.random() * 3)
 
 def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+    return verify_password(plain_password, hashed_password)
 
 
 def get_password_hash(password):
-    return pwd_context.hash(password)
+    return hash_password(password)
 
 
 def get_user( email: str)-> User|None:
