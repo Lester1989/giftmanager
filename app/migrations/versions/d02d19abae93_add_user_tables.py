@@ -37,14 +37,12 @@ def upgrade() -> None:
     schema='public'
     )
     op.create_table('user_password_reset',
-    sa.Column('reset_id', sa.String(), nullable=False),
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('id', sa.UUID(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     schema='public'
     )
     op.create_table('user_registration',
-    sa.Column('registration_id', sa.String(), nullable=False),
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('id', sa.UUID(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
