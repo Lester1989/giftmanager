@@ -12,6 +12,7 @@ def send_test_email():
     })
 
 def send_registration_mail(to_mail:str,registration_id:str,user_id:str):
+    print(f'start sending registration mail to {to_mail}')
     send_result = resend.Emails.send({
         "from": os.environ.get('RESEND_DOMAIN'),
         "to": to_mail,
@@ -23,6 +24,7 @@ def send_registration_mail(to_mail:str,registration_id:str,user_id:str):
     return send_result
 
 def send_password_reset_mail(to_mail:str,user_id:str,reset_id:str):
+    print(f'start sending reset mail to {to_mail}')
     send_result = resend.Emails.send({
         "from": os.environ.get('RESEND_DOMAIN'),
         "to": to_mail,
