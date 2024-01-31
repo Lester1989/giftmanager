@@ -53,7 +53,7 @@ async def register_post(request: Request):
         await auth.fake_delay()
         raise HTTPException(status_code=400, detail="User already exists, please use passwort reset")
     new_user = User(email=email,password_hash=auth.get_password_hash(password))
-    registration = UserRegistration(email=email)
+    registration = UserRegistration(id=new_ulid(),email=email)
     db.session.add(new_user)
     db.session.add(registration)
     db.session.commit()
@@ -85,7 +85,7 @@ async def password_reset_post(request: Request):
     form = await request.form()
     email = form.get('email')
     if db_user:= db.session.query(User).filter(User.email == email).first():
-        reset = UserPasswordReset(email=email)
+        reset = UserPasswordReset(id=new_ulid(),email=email)
         db.session.add(reset)
         db.session.commit()
         db.session.refresh(reset)
