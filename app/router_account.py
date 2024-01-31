@@ -10,6 +10,10 @@ from app.mail_sending import send_registration_mail,send_password_reset_mail
 
 app = APIRouter()
 
+
+def new_uuid():
+    return new_ulid().uuid
+
 @app.get("/login", response_class=HTMLResponse)
 async def login_get(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
@@ -53,7 +57,7 @@ async def register_post(request: Request):
         await auth.fake_delay()
         raise HTTPException(status_code=400, detail="User already exists, please use passwort reset")
     new_user = User(email=email,password_hash=auth.get_password_hash(password))
-    registration = UserRegistration(id=new_ulid(),email=email)
+    registration = UserRegistration(id=new_uuid(),email=email)
     db.session.add(new_user)
     db.session.add(registration)
     db.session.commit()
@@ -85,7 +89,7 @@ async def password_reset_post(request: Request):
     form = await request.form()
     email = form.get('email')
     if db_user:= db.session.query(User).filter(User.email == email).first():
-        reset = UserPasswordReset(id=new_ulid(),email=email)
+        reset = UserPasswordReset(id=new_uuid(),email=email)
         db.session.add(reset)
         db.session.commit()
         db.session.refresh(reset)
