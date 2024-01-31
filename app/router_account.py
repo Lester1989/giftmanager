@@ -59,7 +59,7 @@ async def register_post(request: Request):
     db.session.commit()
     db.session.refresh(new_user)
     db.session.refresh(registration)
-    await send_registration_mail(email,registration.id,new_user.id)
+    send_registration_mail(email,registration.id,new_user.id)
 
     return templates.TemplateResponse("register_done.html", {"request": request})
 
@@ -89,7 +89,7 @@ async def password_reset_post(request: Request):
         db.session.add(reset)
         db.session.commit()
         db.session.refresh(reset)
-        await send_password_reset_mail(email,reset.id,db_user.id)
+        send_password_reset_mail(email,reset.id,db_user.id)
 
     return templates.TemplateResponse("login.html", {"request": request})
 
