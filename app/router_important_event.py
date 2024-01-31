@@ -1,11 +1,10 @@
-from typing import Optional
 from fastapi import APIRouter, Form,Request
 from fastapi import HTTPException,Depends,status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi_sqlalchemy import db
-from datetime import datetime, timedelta,date
+from datetime import date
 from ulid import new as new_ulid
-from app.models import User,Friend,UserFriend,GiftIdea,InteractionLog,ImportantEvent,InteractionViaType,TalkingPoint
+from app.models import User,Friend,UserFriend,ImportantEvent
 from app.template_loading import templates
 import app.auth as auth
 

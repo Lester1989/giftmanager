@@ -48,15 +48,19 @@ async def register_post(request: Request):
     form = await request.form()
     email = form.get('email')
     password = form.get('password')
-    db_user = db.session.query(User).filter(User.email == email).first()
-    if db_user:
+    if db_user := db.session.query(User).filter(User.email == email).first():
         # add delay to prevent timing attack
         await auth.fake_delay()
         raise HTTPException(status_code=400, detail="User already exists, please use passwort reset")
-    # TODO Send Mail
-    db.session.add(User(email=email,password_hash=auth.get_password_hash(password)))
-    db.session.add(UserRegistration(email=email))
+    new_user = User(email=email,password_hash=auth.get_password_hash(password))
+    registration = UserRegistration(email=email)
+    db.session.add(new_user)
+    db.session.add(registration)
     db.session.commit()
+    db.session.refresh(new_user)
+    db.session.refresh(registration)
+    await send_registration_mail(email,registration.id,new_user.id)
+
     return templates.TemplateResponse("register_done.html", {"request": request})
 
 @app.get("/confirm_registration/{registration_id}/{user_id}", response_class=HTMLResponse)
@@ -81,9 +85,11 @@ async def password_reset_post(request: Request):
     form = await request.form()
     email = form.get('email')
     if db_user:= db.session.query(User).filter(User.email == email).first():
-        db.session.add(UserPasswordReset(email=email))
+        reset = UserPasswordReset(email=email)
+        db.session.add(reset)
         db.session.commit()
-        # TODO Send Mail
+        db.session.refresh(reset)
+        await send_password_reset_mail(email,reset.id,db_user.id)
 
     return templates.TemplateResponse("login.html", {"request": request})
 
@@ -92,10 +98,10 @@ async def password_reset_confirm_get(request: Request,reset_id:str,user_id:str):
     db_reset = db.session.query(UserPasswordReset).filter(UserPasswordReset.id == reset_id).first()
     if not db_reset:
         raise HTTPException(status_code=404, detail="Reset not found")
-    db_user = db.session.query(User).filter(User.id == user_id,User.email==db_reset.email).first()
-    if not db_user:
+    if ( db_user := db.session.query(User) .filter(User.id == user_id, User.email == db_reset.email) .first() ):
+        return templates.TemplateResponse("password_change.html", {"request": request})
+    else:
         raise HTTPException(status_code=404, detail="User not found")
-    return templates.TemplateResponse("password_change.html", {"request": request})
 
 @app.post("/password_reset/{reset_id}/{user_id}")
 async def password_reset_confirm_post(request: Request,reset_id:str,user_id:str):
