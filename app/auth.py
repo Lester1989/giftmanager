@@ -19,7 +19,7 @@ from fastapi.security import OAuth2, OAuth2PasswordBearer, OAuth2PasswordRequest
 from jose import JWTError, jwt
 from pydantic import BaseModel
 from typing import Annotated,Optional,Dict
-from app.models import User
+from app.models import User, UserRegistration
 from fastapi import Body
 from uuid import UUID
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
@@ -149,7 +149,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme))-> User:
 
 async def get_current_active_user(current_user: User = Depends(get_current_user))-> User:
     if not current_user.is_activated:
-        raise HTTPException(status_code=400, detail="User is not active!")
+        open_registrion_id = db.session.query(UserRegistration.id).filter(UserRegistration.email == current_user.email).first()
+        raise HTTPException(status_code=400, detail=f"User is not active! {current_user.id=} {current_user.email=} {open_registrion_id=}")
     return current_user
 
 
