@@ -14,7 +14,22 @@ app = APIRouter()
 @app.get("/friends", response_class=HTMLResponse)
 def get_friends(request: Request,current_user: User = Depends(auth.get_current_active_user)):
     friends = db.session.query(Friend).filter(Friend.id == UserFriend.friend_id,current_user.id == UserFriend.login_id).all()
-    return templates.TemplateResponse("friend_overview.html", {"request": request, "friends": friends})
+    interactions = db.session.query(InteractionLog).filter(InteractionLog.friend_id == UserFriend.friend_id,current_user.id == UserFriend.login_id).order_by(InteractionLog.date).all()
+    important_events = db.session.query(ImportantEvent).filter(ImportantEvent.friend_id == UserFriend.friend_id,current_user.id == UserFriend.login_id).all()
+    gift_ideas = db.session.query(GiftIdea).filter(GiftIdea.friend_id == UserFriend.friend_id,current_user.id == UserFriend.login_id, not GiftIdea.done).all()
+    days_until_christmas = (date(date.today().year,12,24)-date.today()).days
+
+    friends_alerts = {
+        friend.id:{
+            'interactions':sorted([interaction for interaction in interactions if interaction.friend_id == friend.id],key=lambda x: x.date,reverse=True)[:3],
+            'important_events': sorted([important_event for important_event in important_events if important_event.friend_id == friend.id],key=lambda x: x.date)[:3],
+            'gift_ideas': [gift_idea for gift_idea in gift_ideas if gift_idea.friend_id == friend.id],
+            'days_until_christmas': days_until_christmas if friend.receives_christmas_gift else None,
+            'days_until_birthday': (friend.birthday.date()-date.today()).days if friend.birthday and friend.receives_birthday_gift else None,
+        }
+        for friend in friends
+    }
+    return templates.TemplateResponse("friend_overview.html", {"request": request, "friends": friends, "friends_alerts": friends_alerts})
 
 
 @app.post("/add_friend", response_class=RedirectResponse)

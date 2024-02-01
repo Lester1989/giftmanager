@@ -36,8 +36,9 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [X] connect login to system
 - [ ] add settings page
 - [ ] add settings for time thresolds
-- [X] WIP add registration and add registration emails
+- [X] add registration and add registration emails
 - [ ] add DEMO mode
+- [ ] add Onboarding
 
 # Pending Refactorings and Maintenance
 

@@ -10,12 +10,16 @@
                 <div class="flex justify-between w-full">
                     <div>{{ friend.first_name }} {{ friend.last_name }}</div>
                     <div class="flex gap-2">
+                    {% if friend.receives_birthday_gift and friends_alerts[friend.id]['days_until_birthday']<=20 %}
                         <div class="chip chip-secondary">
                             <span class="">Birthday</span>
                         </div>
+                    {% endif %}
+                    {% if friend.receives_christmas_gift and friends_alerts[friend.id]['days_until_christmas']<=20 %}
                         <div class="chip chip-secondary">
                             <span class="">Christmas</span>
                         </div>
+                    {% endif %}
                         <div class="chip chip-primary">
                             <span class="">Keep in Touch</span>
                         </div>
