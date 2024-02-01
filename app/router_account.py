@@ -1,5 +1,5 @@
 from fastapi import APIRouter,Request
-from fastapi import HTTPException
+from fastapi import HTTPException,status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi_sqlalchemy import db
 from ulid import new as new_ulid
@@ -33,7 +33,7 @@ async def login_post(request: Request):
         await auth.fake_delay()
         raise HTTPException(status_code=401, detail="Wrong password")
     access_token = auth.create_access_token(data={"sub": db_user.email})
-    response = RedirectResponse(url='/')
+    response = RedirectResponse(url='/', status_code=status.HTTP_303_SEE_OTHER)
     response.set_cookie(key="access_token", value=f"Bearer {access_token}")
     return response
 
@@ -120,4 +120,4 @@ async def password_reset_confirm_post(request: Request,reset_id:str,user_id:str)
     db_user.password_hash = auth.get_password_hash(password)
     db.session.delete(db_reset)
     db.session.commit()
-    return RedirectResponse(url='/login')
+    return RedirectResponse(url='/login', status_code=status.HTTP_303_SEE_OTHER)
