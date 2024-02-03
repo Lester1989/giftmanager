@@ -29,7 +29,7 @@ def get_friends(request: Request,current_user: User = Depends(auth.get_current_a
         }
         for friend in friends
     }
-    return templates.TemplateResponse("friend_overview.html", {"request": request, "friends": friends, "friends_alerts": friends_alerts,'has_demo_data':has_demo_data}.update(get_translations(request)))
+    return templates.TemplateResponse("friend_overview.html", {"request": request, "friends": friends, "friends_alerts": friends_alerts,'has_demo_data':has_demo_data}|get_translations(request))
 
 
 @app.post("/add_friend", response_class=RedirectResponse)
@@ -134,6 +134,6 @@ def get_friend(request: Request, friend_id: str,current_user: User = Depends(aut
                 "interactions": interactions,
                 "gift_ideas": gift_ideas,
                 'important_events': important_events,
-            }.update(get_translations(request)))
+            }|get_translations(request))
     else:
         raise HTTPException(status_code=404, detail="Friend not found")

@@ -19,5 +19,5 @@ def get_calendar(request: Request,current_user: User = Depends(auth.get_current_
         for friend in db.session.query(Friend).filter(UserFriend.friend_id == Friend.id, UserFriend.login_id == current_user.id).all()
     }
     important_events = db.session.query(ImportantEvent).filter(UserFriend.friend_id == ImportantEvent.friend_id, UserFriend.login_id == current_user.id).all()
-    return templates.TemplateResponse("calendar.html", {"request": request, "important_events": important_events, "friend_names": friend_names}.update(get_translations(request)))
+    return templates.TemplateResponse("calendar.html", {"request": request, "important_events": important_events, "friend_names": friend_names}|get_translations(request))
 

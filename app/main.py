@@ -44,7 +44,7 @@ def landing_redirect():
 
 @app.get("/home", response_class=HTMLResponse)
 def home(request: Request):
-    return templates.TemplateResponse("base.html", {"request": request}.update(get_translations(request)))
+    return templates.TemplateResponse("base.html", {"request": request}|get_translations(request))
 
 @app.get("/test_mail")
 def test_mail(request: Request,current_user: User = Depends(auth.get_current_active_user)):

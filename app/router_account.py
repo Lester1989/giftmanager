@@ -17,7 +17,7 @@ def new_uuid():
 
 @app.get("/login", response_class=HTMLResponse)
 async def login_get(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request}.update(get_translations(request)))
+    return templates.TemplateResponse("login.html", {"request": request}|get_translations(request))
 
 @app.post("/login")
 async def login_post(request: Request):
@@ -46,7 +46,7 @@ async def logout(request: Request):
 
 @app.get("/register", response_class=HTMLResponse)
 async def register_get(request: Request):
-    return templates.TemplateResponse("register.html", {"request": request}.update(get_translations(request)))
+    return templates.TemplateResponse("register.html", {"request": request}|get_translations(request))
 
 @app.post("/register")
 async def register_post(request: Request):
@@ -66,7 +66,7 @@ async def register_post(request: Request):
     db.session.refresh(registration)
     send_registration_mail(email,registration.id,new_user.id)
 
-    return templates.TemplateResponse("register_done.html", {"request": request}.update(get_translations(request)))
+    return templates.TemplateResponse("register_done.html", {"request": request}|get_translations(request))
 
 @app.get("/confirm_registration/{registration_id}/{user_id}", response_class=HTMLResponse)
 async def confirm_registration_get(request: Request,registration_id:str,user_id:str):
@@ -80,7 +80,7 @@ async def confirm_registration_get(request: Request,registration_id:str,user_id:
     db.session.delete(db_registration)
     db.session.commit()
     generate_demo_data(db.session,db_user.id)
-    return templates.TemplateResponse("register_activated.html", {"request": request}.update(get_translations(request)))
+    return templates.TemplateResponse("register_activated.html", {"request": request}|get_translations(request))
 
 @app.get("/remove_demo_data", response_class=RedirectResponse)
 async def remove_demo_data_get(request: Request, current_user: User = Depends(auth.get_current_active_user)):
@@ -89,7 +89,7 @@ async def remove_demo_data_get(request: Request, current_user: User = Depends(au
 
 @app.get("/password_reset", response_class=HTMLResponse)
 async def password_reset_get(request: Request):
-    return templates.TemplateResponse("password_reset.html", {"request": request}.update(get_translations(request)))
+    return templates.TemplateResponse("password_reset.html", {"request": request}|get_translations(request))
 
 @app.post("/password_reset")
 async def password_reset_post(request: Request):
@@ -102,7 +102,7 @@ async def password_reset_post(request: Request):
         db.session.refresh(reset)
         send_password_reset_mail(email,reset.id,db_user.id)
 
-    return templates.TemplateResponse("login.html", {"request": request}.update(get_translations(request)))
+    return templates.TemplateResponse("login.html", {"request": request}|get_translations(request))
 
 @app.get("/password_reset/{reset_id}/{user_id}", response_class=HTMLResponse)
 async def password_reset_confirm_get(request: Request,reset_id:str,user_id:str):
@@ -110,7 +110,7 @@ async def password_reset_confirm_get(request: Request,reset_id:str,user_id:str):
     if not db_reset:
         raise HTTPException(status_code=404, detail="Reset not found")
     if ( db_user := db.session.query(User) .filter(User.id == user_id, User.email == db_reset.email) .first() ):
-        return templates.TemplateResponse("password_change.html", {"request": request}.update(get_translations(request)))
+        return templates.TemplateResponse("password_change.html", {"request": request}|get_translations(request))
     else:
         raise HTTPException(status_code=404, detail="User not found")
 

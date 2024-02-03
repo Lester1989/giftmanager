@@ -72,7 +72,7 @@ def new_interaction(request: Request, friend_id: str,current_user: User = Depend
                 "talking_point_suggstions": talking_points,
                 "gift_ideas": gift_ideas,
                 "important_events": important_events
-            }.update(get_translations(request)))
+            }|get_translations(request))
     else:
         raise HTTPException(status_code=404, detail="Friend not found")
 
