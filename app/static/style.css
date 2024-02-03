@@ -1252,6 +1252,11 @@ video {
   color: rgb(43 61 108 / var(--tw-text-opacity));
 }
 
+.text-red {
+  --tw-text-opacity: 1;
+  color: rgb(255 0 0 / var(--tw-text-opacity));
+}
+
 .text-transparent {
   color: transparent;
 }
@@ -1259,11 +1264,6 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.text-red {
-  --tw-text-opacity: 1;
-  color: rgb(255 0 0 / var(--tw-text-opacity));
 }
 
 .no-underline {
