@@ -12,6 +12,7 @@ templates = Jinja2Templates(directory="app/templates")
 def get_translations(request:Request)->dict[str,str]:
     requested_languages:list[str] = request.headers.get('Accept-Language','en').split(',')
     for language in requested_languages:
-        if language.split('-')[0].lower() in locales:
-            return locales[language]
+        clean_language = language.split('-')[0].lower()
+        if clean_language in locales:
+            return locales[clean_language]
     return locales['en']
