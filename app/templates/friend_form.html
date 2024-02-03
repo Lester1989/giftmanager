@@ -1,0 +1,39 @@
+<div class="mb-4">
+    <label for="first_name" class="block font-bold">{{ txt_first_name }}:</label>
+    <input class="form-field " type="text" id="first_name" name="first_name" value="{{ friend.first_name }}">
+</div>
+<div class="mb-4">
+    <label for="last_name" class="block font-bold">{{ txt_last_name }}:</label>
+    <input class="form-field" type="text" id="last_name" name="last_name" value="{{ friend.last_name }}">
+</div>
+<div class="mb-4">
+    <label for="address" class="block font-bold">{{ txt_address }}:</label>
+    <input class="form-field" type="text" id="address" name="address" value="{{ friend.address }}">
+</div>
+<div class="mb-4">
+    <label for="phone_number" class="block font-bold">{{ txt_phone_number }}:</label>
+    <input class="form-field" type="text" id="phone_number" name="phone_number"
+        value="{{ friend.phone_number }}">
+</div>
+<div class="mb-4">
+    <label for="email" class="block font-bold">{{ txt_email }}:</label>
+    <input class="form-field" type="email" id="email" name="email" value="{{ friend.email }}">
+</div>
+<div class="mb-4">
+    <label for="birthday" class="block font-bold">{{ txt_birthday }}:</label>
+    <input class="form-field" type="date" id="birthday" name="birthday" value="{{ friend.birthday }}">
+</div>
+<div class="mb-4">
+    <label for="notes" class="block font-bold">{{ txt_notes }}:</label>
+    <textarea class="form-field" id="notes" name="notes">{{ friend.notes }}</textarea>
+</div>
+<div class="mb-4">
+    <label for="receives_christmas_gift" class="block font-bold">{{ txt_receives_christmas_gift}}:</label>
+    <input type="checkbox" id="receives_christmas_gift" name="receives_christmas_gift"
+        value="{{ friend.receives_christmas_gift }}">
+</div>
+<div class="mb-4">
+    <label for="receives_birthday_gift" class="block font-bold">{{ txt_receives_birthday_gift }}:</label>
+    <input type="checkbox" id="receives_birthday_gift" name="receives_birthday_gift"
+        value="{{ friend.receives_birthday_gift }}">
+</div>

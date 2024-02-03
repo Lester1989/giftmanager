@@ -1,9 +1,9 @@
 {% extends 'base.html' %} {% block content %}
 <div class="w-1/2">
     <div class="panel">
-        <h1 class="text-2xl font-bold mb-4">Account activated!</h1>
-        <p class="mb-4">Your account has been activated. You can now log in.</p>
-        <a href="/login" class="btn-rainbow">To Login</a>
+        <h1 class="text-2xl font-bold mb-4">{{ txt_account_activated }}</h1>
+        <p class="mb-4">{{ txt_account_activated_full }}</p>
+        <a href="/login" class="btn-rainbow">{{ txt_login }}</a>
     </div>
 </div>
 {% endblock %}

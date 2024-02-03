@@ -109,6 +109,10 @@ class TalkingPoint(Base):
     __tablename__ = "talking_point"
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
     point: Mapped[str]
-    
+
+class DemoData(Base):
+    __tablename__ = "demo_data"
+    user_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
+    friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
 
 

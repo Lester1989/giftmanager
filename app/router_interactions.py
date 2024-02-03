@@ -6,7 +6,7 @@ from fastapi_sqlalchemy import db
 from datetime import datetime, timedelta,date
 from ulid import new as new_ulid
 from app.models import User,Friend,UserFriend,GiftIdea,InteractionLog,ImportantEvent,InteractionViaType,TalkingPoint
-from app.template_loading import templates
+from app.template_loading import templates,get_translations
 import app.auth as auth
 
 app = APIRouter()
@@ -72,7 +72,7 @@ def new_interaction(request: Request, friend_id: str,current_user: User = Depend
                 "talking_point_suggstions": talking_points,
                 "gift_ideas": gift_ideas,
                 "important_events": important_events
-            })
+            }.update(get_translations(request)))
     else:
         raise HTTPException(status_code=404, detail="Friend not found")
 

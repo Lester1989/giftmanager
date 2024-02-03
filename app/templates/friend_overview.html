@@ -3,7 +3,7 @@
 {% block content %}
 <div class="flex flex-col w-full xl:w-3/5 justify-center lg:items-start overflow-y-hidden">
     <div class="panel">
-        <h1 class="text-2xl font-bold mb-4">Friends</h1>
+        <h1 class="text-2xl font-bold mb-4">{{ txt_friends }}</h1>
         <ul class="space-y-2">
             {% for friend in friends %}
             <li class="flex items-center">
@@ -12,28 +12,28 @@
                     <div class="flex gap-2">
                     {% if friend.receives_birthday_gift and friends_alerts[friend.id]['days_until_birthday']<=20 %}
                         <div class="chip chip-secondary">
-                            <span class="">Birthday</span>
+                            <span class="">{{ txt_chip_birthday }}</span>
                         </div>
                     {% endif %}
                     {% if friend.receives_christmas_gift and friends_alerts[friend.id]['days_until_christmas']<=20 %}
                         <div class="chip chip-secondary">
-                            <span class="">Christmas</span>
+                            <span class="">{{ txt_chip_christmas }}</span>
                         </div>
                     {% endif %}
                     {% if friends_alerts[friend.id]['days_since_last_interaction']>=20 %}
                         <div class="chip chip-primary">
-                            <span class="">Keep in Touch</span>
+                            <span class="">{{ txt_chip_keep_in_touch }}</span>
                         </div>
                     {% endif %}
                     {% if friends_alerts[friend.id]['important_events'] %}
                         <div class="chip chip-warning" title="{% for imp_ev,ev_date in friends_alerts[friend.id]['important_events'] %}{{imp_ev}}({{ev_date}}), {% endfor %}">
-                            <span class="">Important Date</span>
+                            <span class="">{{ txt_chip_important_date }}</span>
                         </div>
                     </div>
                     {% endif %}
                     {% if friends_alerts[friend.id]['gift_ideas']<1 %}
                         <div class="chip chip-warning">
-                            <span class="">Gift Ideas</span>
+                            <span class="">{{ txt_chip_gift_ideas }}</span>
                         </div>
                     </div>
                     {% endif %}
@@ -64,45 +64,10 @@
 
 <div class="w-full xl:w-2/5 px-12 overflow-hidden">
     <div class="panel">
-        <h2 class="text-xl font-bold mb-4">Add New Friend</h2>
+        <h2 class="text-xl font-bold mb-4">{{ txt_add_new_friend }}</h2>
         <form action="/add_friend" method="post">
-            <div class="mb-4">
-                <label for="first_name" class="block font-bold">First Name:</label>
-                <input class="form-field" type="text" id="first_name" name="first_name" required>
-            </div>
-            <div class="mb-4">
-                <label for="last_name" class="block font-bold">Last Name:</label>
-                <input class="form-field" type="text" id="last_name" name="last_name">
-            </div>
-            <div class="mb-4">
-                <label for="address" class="block font-bold">Address:</label>
-                <input class="form-field" type="text" id="address" name="address">
-            </div>
-            <div class="mb-4">
-                <label for="phone_number" class="block font-bold">Phone Number:</label>
-                <input class="form-field" type="text" id="phone_number" name="phone_number">
-            </div>
-            <div class="mb-4">
-                <label for="email" class="block font-bold">Email:</label>
-                <input class="form-field" type="email" id="email" name="email">
-            </div>
-            <div class="mb-4">
-                <label for="birthday" class="block font-bold">Birthday:</label>
-                <input class="form-field" type="date" id="birthday" name="birthday">
-            </div>
-            <div class="mb-4">
-                <label for="notes" class="block font-bold">Notes:</label>
-                <textarea class="form-field" id="notes" name="notes"></textarea>
-            </div>
-            <div class="mb-4">
-                <label for="receives_christmas_gift" class="block font-bold">Receives Christmas Gift:</label>
-                <input type="checkbox" id="receives_christmas_gift" name="receives_christmas_gift">
-            </div>
-            <div class="mb-4">
-                <label for="receives_birthday_gift" class="block font-bold">Receives Birthday Gift:</label>
-                <input type="checkbox" id="receives_birthday_gift" name="receives_birthday_gift">
-            </div>
-            <button type="submit" class="btn-rainbow">Add Friend</button>
+            {% include "friend_form.html" %}
+            <button type="submit" class="btn-rainbow">{{ txt_add_friend }}</button>
         </form>
     </div>
 </div>

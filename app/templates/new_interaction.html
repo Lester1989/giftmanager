@@ -6,37 +6,37 @@
 <div class="flex flex-col w-full xl:w-2/5 justify-start lg:items-start overflow-y-hidden" >
     <div class="panel" >
     
-        <h1 class="text-2xl font-bold mb-4">New Interaction with {{ friend.first_name }}</h1>
+        <h1 class="text-2xl font-bold mb-4">{{ txt_new_interaction_with }} {{ friend.first_name }}</h1>
     <form action="/add_interaction/{{friend.id}}" method="post">
       <div class="flex flex-col items-stretch w-full">
-        <label for="date" class="block font-bold" >Date</label >
+        <label for="date" class="block font-bold" >{{ txt_date }}</label >
         <input class="form-field" type="date" name="date" value="{{date}}" id="date" />
       </div>
     <div class="flex flex-col items-stretch w-full">
-      <label for="talking_points" class="block font-bold" >Talkingpoints</label >
+      <label for="talking_points" class="block font-bold" >{{ txt_talking_points }}</label >
       <textarea class="form-field" name="talking_points" id="talking_points"></textarea >
     </div>
       <div class="flex items-center mt-4">
         <input id="default-radio-1" type="radio" value="telephone" name="via" class="form-radio" />
-        <label for="default-radio-1" class="block font-bold" >telephone</label >
+        <label for="default-radio-1" class="block font-bold" >{{ txt_via_telephone }}</label >
       </div>
       <div class="flex items-center">
         <input id="default-radio-2" type="radio" value="email" name="via" class="form-radio" />
-        <label for="default-radio-2" class="block font-bold" >email</label >
+        <label for="default-radio-2" class="block font-bold" >{{ txt_via_email }}</label >
       </div>
       <div class="flex items-center">
         <input id="default-radio-3" type="radio" value="messenger" name="via" class="form-radio" />
-        <label for="default-radio-3" class="block font-bold" >messenger</label >
+        <label for="default-radio-3" class="block font-bold" >{{ txt_via_messenger }}</label >
       </div>
       <div class="flex items-center">
         <input id="default-radio-4" type="radio" value="in_person" name="via" class="form-radio" />
-        <label for="default-radio-4" class="block font-bold" >in_person</label >
+        <label for="default-radio-4" class="block font-bold" >{{ txt_via_in_person }}</label >
       </div>
       <div class="flex items-center my-4">
         <input id="ask_again" type="checkbox" value="" name="ask_again" class="form-radio" />
-        <label for="ask_again" class="block font-bold" >ask_again</label >
+        <label for="ask_again" class="block font-bold" >{{ txt_ask_again}}</label >
       </div>
-      <button type="submit" class="btn-rainbow">Save Interaction</button>
+      <button type="submit" class="btn-rainbow">{{ txt_save }}</button>
     </form>
   </div>
 
@@ -45,11 +45,11 @@
     <div class="panel" >
 
     <div class="flex flex-col items-stretch w-full">
-      <label for="notes" class="block font-bold" >Notes for {{ friend.first_name }}</label >
+      <label for="notes" class="block font-bold" >{{ txt_notes_for }} {{ friend.first_name }}</label >
       <textarea class="form-field" name="notes" id="notes"> {{ friend.notes}}</textarea >
     </div>
 
-    <h2 class="text-xl font-bold mb-4">Possible Topics</h2>
+    <h2 class="text-xl font-bold mb-4">{{ txt_opener_suggestions }}</h2>
     <ul>
       {% for suggestion in talking_point_suggstions %}
       <li class="mb-2">
@@ -60,12 +60,12 @@
     </ul>
     <form action="/add_talking_point/{{friend.id}}" method="post">
       <div class="flex flex-col items-stretch w-full">
-        <label for="new_talking_point" class="block font-bold" >New Suggestion</label >
+        <label for="new_talking_point" class="block font-bold" >{{ txt_talking_point }}</label >
         <input class="form-field" type="text" name="new_talking_point" id="new_talking_point" />
       </div>
-      <button type="submit" class="btn-rainbow mt-2">Add Suggestion</button>
+      <button type="submit" class="btn-rainbow mt-2">{{ txt_save }}</button>
     </form>
-    <h2 class="text-xl font-bold mb-4">Gift Ideas</h2>
+    <h2 class="text-xl font-bold mb-4">{{ txt_gift_ideas }}</h2>
     <ul>
       {% for gift_idea in gift_ideas %}
       <li class="mb-2">
@@ -77,12 +77,12 @@
     </ul>
     <form action="/add_gift_idea/{{friend.id}}" method="post">
       <div class="flex flex-col items-stretch w-full">
-        <label for="new_gift_idea" class="block font-bold" >New Gift Idea</label >
+        <label for="new_gift_idea" class="block font-bold" >{{ txt_gift_idea }}</label >
         <input class="form-field" type="text" name="new_gift_idea" id="new_gift_idea" />
       </div>
-      <button type="submit" class="btn-rainbow mt-2">Add Gift Idea</button>
+      <button type="submit" class="btn-rainbow mt-2">{{ txt_save }}</button>
     </form>
-    <h2 class="text-xl font-bold mb-4">Important Events</h2>
+    <h2 class="text-xl font-bold mb-4">{{ txt_important_events }}</h2>
     <ul>
       {% for important_event in important_events %}
       <li class="mb-2">
@@ -93,18 +93,18 @@
     </ul>
     <form action="/add_important_event/{{friend.id}}" method="post">
       <div class="flex flex-col items-stretch w-full">
-        <label for="new_important_event" class="block font-bold" >New Important Event</label >
+        <label for="new_important_event" class="block font-bold" >{{ txt_important_event }}</label >
         <input class="form-field" type="text" name="new_important_event" id="new_important_event" />
       </div>
         <div class="flex flex-col items-stretch w-full">
-            <label for="new_important_event_date" class="block font-bold" >Date</label >
+            <label for="new_important_event_date" class="block font-bold" >{{ txt_date }}</label >
             <input class="form-field" type="date" name="new_important_event_date" id="new_important_event_date" />
         </div>
       <div class="flex flex-col items-stretch w-full">
-        <label for="new_important_event_details" class="block font-bold" >Details</label >
+        <label for="new_important_event_details" class="block font-bold" >{{ txt_details }}</label >
         <textarea class="form-field" type="text" name="new_important_event_details" id="new_important_event_details"></textarea>
       </div>
-      <button type="submit" class="btn-rainbow mt-2">Add Important Event</button>
+      <button type="submit" class="btn-rainbow mt-2">{{ txt_save }}</button>
     </form>
   </div>
 </div>

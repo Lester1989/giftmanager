@@ -6,7 +6,7 @@ from fastapi_sqlalchemy import db
 from datetime import datetime, timedelta,date
 from ulid import new as new_ulid
 from app.models import User,Friend,UserFriend,GiftIdea,InteractionLog,ImportantEvent,InteractionViaType,TalkingPoint
-from app.template_loading import templates
+from app.template_loading import templates,get_translations
 import app.auth as auth
 
 app = APIRouter()
@@ -15,7 +15,7 @@ app = APIRouter()
 @app.get("/new_gift_idea", response_class=HTMLResponse)
 def add_gift_idea(request: Request, friend_id: str,current_user: User = Depends(auth.get_current_active_user)):
     friend = db.session.query(Friend).filter(UserFriend.friend_id == Friend.id, UserFriend.login_id == current_user.id).get(friend_id)
-    return templates.TemplateResponse("new_gift_idea.html", {"request": request, "friend": friend})
+    return templates.TemplateResponse("new_gift_idea.html", {"request": request, "friend": friend}.update(get_translations(request)))
 
 @app.post("/add_gift_idea/{friend_id}", response_class=RedirectResponse)
 def add_gift_idea_post(request: Request, friend_id: str, new_gift_idea: str = Form(""),current_user: User = Depends(auth.get_current_active_user)):

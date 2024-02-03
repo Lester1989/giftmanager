@@ -1,21 +1,21 @@
 {% extends 'base.html' %} {% block content %}
 <div class="w-1/2">
   <div class="panel">
-    <h1 class="text-2xl font-bold mb-4" action="/add_important_event/{{friend.id}}" method="post">Create a Important Event for {{ friend.first_name }}</h1>
+    <h1 class="text-2xl font-bold mb-4" action="/add_important_event/{{friend.id}}" method="post">{{ txt_create_important_event_for }} {{ friend.first_name }}</h1>
     <form class="max-w-sm mx-auto" action="/add_gift_idea/{{friend.id}}" method="post">
        <div class="flex flex-col items-stretch w-full">
-        <label for="new_important_event" class="block font-bold" >New Important Event</label >
+        <label for="new_important_event" class="block font-bold" >{{ txt_important_event }}</label >
         <input class="form-field" type="text" name="new_important_event" id="new_important_event" />
       </div>
         <div class="flex flex-col items-stretch w-full">
-            <label for="new_important_event_date" class="block font-bold" >Date</label >
+            <label for="new_important_event_date" class="block font-bold" >{{ txt_date }}</label >
             <input class="form-field" type="date" name="new_important_event_date" id="new_important_event_date" />
         </div>
       <div class="flex flex-col items-stretch w-full">
-        <label for="new_important_event_details" class="block font-bold" >Details</label >
+        <label for="new_important_event_details" class="block font-bold" >{{ txt_details }}</label >
         <textarea class="form-field" type="text" name="new_important_event_details" id="new_important_event_details"></textarea>
       </div>
-      <button type="submit" class="btn-rainbow">Submit</button>
+      <button type="submit" class="btn-rainbow">{{ txt_save }}</button>
     </form>
   </div>
 </div>

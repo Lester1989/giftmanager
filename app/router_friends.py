@@ -5,8 +5,8 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi_sqlalchemy import db
 from datetime import datetime, timedelta,date
 from ulid import new as new_ulid
-from app.models import User,Friend,UserFriend,GiftIdea,InteractionLog,ImportantEvent,InteractionViaType
-from app.template_loading import templates
+from app.models import User,Friend,UserFriend,GiftIdea,InteractionLog,ImportantEvent,InteractionViaType,DemoData
+from app.template_loading import templates,get_translations
 import app.auth as auth
 
 app = APIRouter()
@@ -18,7 +18,7 @@ def get_friends(request: Request,current_user: User = Depends(auth.get_current_a
     important_events = db.session.query(ImportantEvent).filter(ImportantEvent.friend_id == UserFriend.friend_id,current_user.id == UserFriend.login_id).all()
     gift_ideas = db.session.query(GiftIdea).filter(GiftIdea.friend_id == UserFriend.friend_id,current_user.id == UserFriend.login_id, not GiftIdea.done).all()
     days_until_christmas = (date(date.today().year,12,24)-date.today()).days
-
+    has_demo_data = bool(list(db.session.query(DemoData).filter(DemoData.user_id == current_user.id).all()))
     friends_alerts = {
         friend.id:{
             'days_since_last_interaction':(date.today() -sorted([interaction for interaction in interactions if interaction.friend_id == friend.id],key=lambda x: x.date,reverse=True)[0].date) if interactions else 1000,
@@ -29,7 +29,7 @@ def get_friends(request: Request,current_user: User = Depends(auth.get_current_a
         }
         for friend in friends
     }
-    return templates.TemplateResponse("friend_overview.html", {"request": request, "friends": friends, "friends_alerts": friends_alerts})
+    return templates.TemplateResponse("friend_overview.html", {"request": request, "friends": friends, "friends_alerts": friends_alerts,'has_demo_data':has_demo_data}.update(get_translations(request)))
 
 
 @app.post("/add_friend", response_class=RedirectResponse)
@@ -54,7 +54,23 @@ async def add_friend(request: Request,current_user: User = Depends(auth.get_curr
     db.session.commit()
     return RedirectResponse(url='/friends', status_code=status.HTTP_302_FOUND)
 
-
+@app.post("/edit_friend/{friend_id}", response_class=RedirectResponse)
+async def edit_friend(request: Request, friend_id: str,current_user: User = Depends(auth.get_current_active_user)):
+    friend:Friend = db.session.query(Friend).filter(UserFriend.friend_id == friend_id, UserFriend.login_id == current_user.id).get(friend_id)
+    if not friend:
+        raise HTTPException(status_code=404, detail="Friend not found")
+    form = await request.form()
+    friend.first_name = form.get('first_name') or friend.first_name
+    friend.last_name = form.get('last_name') or friend.last_name
+    friend.address = form.get('address') or friend.address
+    friend.phone_number = form.get('phone_number') or friend.phone_number
+    friend.email = form.get('email') or friend.email
+    friend.birthday = form.get('birthday') or friend.birthday
+    friend.notes = form.get('notes') or friend.notes
+    friend.receives_christmas_gift = bool(form.get('receives_christmas_gift'))
+    friend.receives_birthday_gift = bool(form.get('receives_birthday_gift'))
+    db.session.commit()
+    return RedirectResponse(url='/friends', status_code=status.HTTP_302_FOUND)
 
 @app.get("/delete_friend/{friend_id}", response_class=RedirectResponse)
 def delete_friend(request: Request, friend_id: str,current_user: User = Depends(auth.get_current_active_user)):
@@ -118,6 +134,6 @@ def get_friend(request: Request, friend_id: str,current_user: User = Depends(aut
                 "interactions": interactions,
                 "gift_ideas": gift_ideas,
                 'important_events': important_events,
-            })
+            }.update(get_translations(request)))
     else:
         raise HTTPException(status_code=404, detail="Friend not found")
