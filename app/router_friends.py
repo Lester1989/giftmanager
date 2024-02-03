@@ -21,9 +21,9 @@ def get_friends(request: Request,current_user: User = Depends(auth.get_current_a
 
     friends_alerts = {
         friend.id:{
-            'interactions':sorted([interaction for interaction in interactions if interaction.friend_id == friend.id],key=lambda x: x.date,reverse=True)[:3],
-            'important_events': sorted([important_event for important_event in important_events if important_event.friend_id == friend.id],key=lambda x: x.date)[:3],
-            'gift_ideas': [gift_idea for gift_idea in gift_ideas if gift_idea.friend_id == friend.id],
+            'days_since_last_interaction':(date.today() -sorted([interaction for interaction in interactions if interaction.friend_id == friend.id],key=lambda x: x.date,reverse=True)[0].date) if interactions else None,
+            'important_events': [(important_event.name,important_event.date) for important_event in important_events if important_event.friend_id == friend.id and abs(date.today()-important_event.date)<5],
+            'gift_ideas': len([gift_idea for gift_idea in gift_ideas if gift_idea.friend_id == friend.id]),
             'days_until_christmas': days_until_christmas if friend.receives_christmas_gift else None,
             'days_until_birthday': (friend.birthday.date()-date.today()).days if friend.birthday and friend.receives_birthday_gift else None,
         }

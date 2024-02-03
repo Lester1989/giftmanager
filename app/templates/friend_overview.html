@@ -20,13 +20,23 @@
                             <span class="">Christmas</span>
                         </div>
                     {% endif %}
+                    {% if friends_alerts[friend.id]['days_since_last_interaction']>=20 %}
                         <div class="chip chip-primary">
                             <span class="">Keep in Touch</span>
                         </div>
-                        <div class="chip chip-warning">
+                    {% endif %}
+                    {% if friends_alerts[friend.id]['important_events'] %}
+                        <div class="chip chip-warning" title="{% for imp_ev,ev_date in friends_alerts[friend.id]['important_events'] %}{{imp_ev}}({{ev_date}}), {% endfor %}">
                             <span class="">Important Date</span>
                         </div>
                     </div>
+                    {% endif %}
+                    {% if friends_alerts[friend.id]['gift_ideas']<1 %}
+                        <div class="chip chip-warning">
+                            <span class="">Gift Ideas</span>
+                        </div>
+                    </div>
+                    {% endif %}
                     <div class="flex gap-2">
                         <a href="/friends/{{ friend.id }}" class="btn-icon-rainbow">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -45,7 +55,7 @@
                             </svg>
                         </a>
                     </div>
-                    </span>
+                </div>
             </li>
             {% endfor %}
         </ul>

@@ -29,7 +29,7 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [ ] use calendar icons for events
 - [X] add event creation
 - [X] add gift creation
-- [ ] hide/show chips
+- [X] hide/show chips
 - [ ] make landing page suggest to contact friend about a topic
 - [ ] filter events by time
 - [X] add login to DB
@@ -39,6 +39,7 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [X] add registration and add registration emails
 - [ ] add DEMO mode
 - [ ] add Onboarding
+- [ ] add Localization
 
 # Pending Refactorings and Maintenance
 
