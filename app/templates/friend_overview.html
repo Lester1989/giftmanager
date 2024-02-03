@@ -66,6 +66,7 @@
     <div class="panel">
         <h2 class="text-xl font-bold mb-4">{{ txt_add_new_friend }}</h2>
         <form action="/add_friend" method="post">
+            {% set friend=False %}
             {% include "friend_form.html" %}
             <button type="submit" class="btn-rainbow">{{ txt_add_friend }}</button>
         </form>
