@@ -38,7 +38,7 @@ def get_friends(request: Request,current_user: User = Depends(auth.get_current_a
             'important_events': [(important_event.name,important_event.date) for important_event in important_events if important_event.friend_id == friend.id and abs(important_event.days_until)<=current_user.settings.get('flag_important_event_days',5)],
             'gift_ideas': len([gift_idea for gift_idea in gift_ideas if gift_idea.friend_id == friend.id]),
             'days_until_christmas': days_until_christmas if friend.receives_christmas_gift else None,
-            'days_until_birthday': (friend.birthday.date()-date.today()).days if friend.birthday and friend.receives_birthday_gift else None,
+            'days_until_birthday': (friend.birthday-date.today()).days if friend.birthday and friend.receives_birthday_gift else None,
         }
         for friend in friends
     }
