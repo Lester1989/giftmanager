@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "giftmanager"
-version = "0.1.26"
+version = "0.1.27"
 description = ""
 authors = ["Lester1989 <lester@techfak.uni-bielefeld.de>"]
 readme = "README.md"
