@@ -1,10 +1,11 @@
 
+import os
 from fastapi import Depends, FastAPI,Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-import os
-from fastapi import FastAPI, HTTPException
+from fastapi import HTTPException
 from fastapi_sqlalchemy import DBSessionMiddleware  # middleware helper
+from starlette.middleware.sessions import SessionMiddleware
 from app.mail_sending import send_test_email
 from app.template_loading import templates,get_translations
 from app.models import User
@@ -16,10 +17,12 @@ from app.router_gift import app as gift_router
 from app.router_important_event import app as important_event_router
 from app.router_interactions import app as interactions_router
 from app.router_settings import app as settings_router
+import random,string
 
 
 app = FastAPI()
 app.add_middleware(DBSessionMiddleware, db_url=os.getenv('CONNECTIONSTRING',"sqlite:///app.db"))
+app.add_middleware(SessionMiddleware, secret_key=''.join(random.choice([string.ascii_letters, string.digits, string.punctuation]) for _ in range(50)))
 
 @app.middleware("http")
 async def check_logged_in(request: Request, call_next):
