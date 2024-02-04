@@ -1,15 +1,10 @@
-from datetime import datetime, timedelta,date
-from typing import Optional
-from fastapi import Depends, FastAPI, Form,Request,status
+
+from fastapi import Depends, FastAPI,Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 import os
-from app.models import Friend, GiftIdea,InteractionLogAPI,InteractionViaType,InteractionLog,ImportantEvent,TalkingPoint
 from fastapi import FastAPI, HTTPException
 from fastapi_sqlalchemy import DBSessionMiddleware  # middleware helper
-from fastapi_sqlalchemy import db  # an object to provide global access to a database session
-from ulid import new as new_ulid
 from app.mail_sending import send_test_email
 from app.template_loading import templates,get_translations
 from app.models import User

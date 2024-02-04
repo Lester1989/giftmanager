@@ -26,10 +26,6 @@ class UserPasswordReset(Base):
     __tablename__ = "user_password_reset"
     email: Mapped[str]
 
-class UserAPI(BaseModel):
-    pass
-
-@create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
 class User(Base):
     __tablename__ = "user"
     email: Mapped[str]
@@ -43,9 +39,6 @@ class UserFriend(Base):
     login_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True),primary_key=True)
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True),primary_key=True)
 
-class FriendAPI(BaseModel):
-    pass
-@create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
 class Friend(Base):
     __tablename__ = "user_account"
     first_name: Mapped[str]
@@ -61,9 +54,6 @@ class Friend(Base):
     def accessible_by(self,user_id:uuid.UUID,session:Session):
         return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.id).first())
 
-class GiftIdeaAPI(BaseModel):
-    pass
-@create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
 class GiftIdea(Base):
     __tablename__ = "gift_idea"
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
@@ -79,9 +69,7 @@ class InteractionViaType(EnumClass):
     messenger = 'messenger'
     in_person = 'in_person'
 
-class InteractionLogAPI(BaseModel):
-    pass
-@create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
+
 class InteractionLog(Base):
     __tablename__ = "interaction_log"
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
@@ -94,9 +82,6 @@ class InteractionLog(Base):
         return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.friend_id).first())
 
 
-class ImportantEventAPI(BaseModel):
-    pass
-@create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
 class ImportantEvent(Base):
     __tablename__ = "important_event"
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
@@ -116,9 +101,6 @@ class ImportantEvent(Base):
         return (self.date - date.today()).days
 
 
-class TalkingPointAPI(BaseModel):
-    pass
-@create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
 class TalkingPoint(Base):
     __tablename__ = "talking_point"
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
