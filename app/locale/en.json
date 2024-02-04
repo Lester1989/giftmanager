@@ -62,5 +62,6 @@
     "txt_keep_in_touch_interval": "Keep in touch interval",
     "txt_minimum_gift_ideas": "Minimum gift ideas",
     "txt_flag_important_event_days": "important event reminder days",
-    "txt_settings": "Settings"
+    "txt_settings": "Settings",
+    "txt_generate_demo_data": "Generate demo data"
 }

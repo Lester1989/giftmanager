@@ -62,5 +62,6 @@
     "txt_keep_in_touch_interval": "Intervall f\u00fcr in Kontakt bleiben",
     "txt_minimum_gift_ideas": "Mindestanzahl an Geschenkideen",
     "txt_flag_important_event_days": "Tage im Voraus wichtige Ereignisse markieren",
-    "txt_settings": "Einstellungen"
+    "txt_settings": "Einstellungen",
+    "txt_generate_demo_data": "Demo-Daten generieren"
 }

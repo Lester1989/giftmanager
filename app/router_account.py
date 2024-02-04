@@ -70,7 +70,7 @@ async def register_post(request: Request):
 
 @app.get("/confirm_registration/{registration_id}/{user_id}", response_class=HTMLResponse)
 async def confirm_registration_get(request: Request,registration_id:str,user_id:str):
-    db_registration = db.session.query(UserRegistration).filter(str(UserRegistration.id) == registration_id).first()
+    db_registration = db.session.query(UserRegistration).filter(UserRegistration.id == registration_id).first()
     if not db_registration:
         raise HTTPException(status_code=404, detail="Registration not found")
     db_user = db.session.query(User).filter(User.id == user_id,User.email==db_registration.email).first()
