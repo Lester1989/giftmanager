@@ -11,6 +11,12 @@ import app.auth as auth
 
 app = APIRouter()
 
+def next_birthday(birthday:date):
+    today = date.today()
+    next_birthday = birthday.replace(year=today.year)
+    if next_birthday < today:
+        next_birthday = next_birthday.replace(year=today.year+1)
+    return next_birthday
 
 @app.get("/calendar", response_class=HTMLResponse)
 def get_calendar(request: Request,current_user: User = Depends(auth.get_current_active_user),days_advance:int=-1):
@@ -24,14 +30,14 @@ def get_calendar(request: Request,current_user: User = Depends(auth.get_current_
     for friend in friends:
         important_events.append(ImportantEvent(
             friend_id=friend.id,
-            date=friend.birthday,
+            date=next_birthday(friend.birthday),
             name=f"{friend.first_name} {friend.last_name}'s Birthday",
             description=translations['txt_receives_birthday_gift'] if friend.receives_birthday_gift else ""
         ))
         if friend.receives_christmas_gift and current_user.settings.get('christmas_reminder',True):
             important_events.append(ImportantEvent(
                 friend_id=friend.id,
-                date=date(friend.birthday.year,12,24),
+                date=date(date.today().year,12,24),
                 name=f"{friend.first_name} {friend.last_name}'s Christmas",
                 description=translations['txt_receives_christmas_gift']
             ))

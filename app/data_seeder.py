@@ -36,6 +36,8 @@ def generate_friends(session:Session, user_id:uuid.UUID):
         for friend_id in friend_ids
     ])
     session.commit()
+    check_demo_data = session.query(DemoData).filter(DemoData.user_id == user_id).all()
+    assert len(check_demo_data) >= 5
     return friend_ids
 
 def generate_gift_ideas(session:Session, friend_ids:list[uuid.UUID]):
@@ -49,6 +51,8 @@ def generate_gift_ideas(session:Session, friend_ids:list[uuid.UUID]):
         for friend_id in friend_ids
     ])
     session.commit()
+    check_gift_ideas = session.query(GiftIdea).filter(GiftIdea.friend_id.in_(friend_ids)).all()
+    assert len(check_gift_ideas) >= 5
 
 def generate_interaction_logs(session:Session, friend_ids:list[uuid.UUID]):
     session.add_all([
@@ -63,6 +67,8 @@ def generate_interaction_logs(session:Session, friend_ids:list[uuid.UUID]):
         for friend_id in friend_ids
     ])
     session.commit()
+    check_interaction_logs = session.query(InteractionLog).filter(InteractionLog.friend_id.in_(friend_ids)).all()
+    assert len(check_interaction_logs) >= 5
 
 def generate_important_events(session:Session, friend_ids:list[uuid.UUID]):
     session.add_all([
@@ -76,6 +82,8 @@ def generate_important_events(session:Session, friend_ids:list[uuid.UUID]):
         for friend_id in friend_ids
     ])
     session.commit()
+    check_important_events = session.query(ImportantEvent).filter(ImportantEvent.friend_id.in_(friend_ids)).all()
+    assert len(check_important_events) >= 5
 
 def generate_talking_points(session:Session, friend_ids:list[uuid.UUID]):
     session.add_all([
@@ -87,6 +95,8 @@ def generate_talking_points(session:Session, friend_ids:list[uuid.UUID]):
         for friend_id in friend_ids
     ])
     session.commit()
+    check_talking_points = session.query(TalkingPoint).filter(TalkingPoint.friend_id.in_(friend_ids)).all()
+    assert len(check_talking_points) >= 5
 
 def generate_demo_data(session:Session, user_id:uuid.UUID):
     friend_ids = generate_friends(session, user_id)
