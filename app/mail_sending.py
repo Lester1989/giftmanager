@@ -2,10 +2,10 @@ import resend
 import os 
 resend.api_key = os.environ.get('RESEND_API_KEY')
 
-def send_test_email():
+def send_test_email(to_mail:str):
     return resend.Emails.send({
         "from": os.environ.get('RESEND_DOMAIN'),
-        "to": "l.ester@gmx.de",
+        "to": to_mail,
         "subject": "Hello World",
         "html": "<p>Congrats on sending your <strong>first email</strong>!</p>",
         "text": "Congrats on sending your first email!",

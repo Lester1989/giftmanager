@@ -1,4 +1,4 @@
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase,Session
 from datetime import datetime,date
 from typing import List
 from typing import Optional
@@ -37,6 +37,7 @@ class User(Base):
     settings: Mapped[dict] = mapped_column(type_=JSONB,server_default='{}')
     is_activated: Mapped[bool] = mapped_column(default=False)
 
+
 class UserFriend(Base):
     __tablename__ = "user_friend"
     login_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True),primary_key=True)
@@ -57,6 +58,9 @@ class Friend(Base):
     receives_christmas_gift: Mapped[bool]
     receives_birthday_gift: Mapped[bool]
 
+    def accessible_by(self,user_id:uuid.UUID,session:Session):
+        return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.id).first())
+
 class GiftIdeaAPI(BaseModel):
     pass
 @create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
@@ -65,6 +69,9 @@ class GiftIdea(Base):
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
     name: Mapped[str]
     done: Mapped[bool]
+
+    def accessible_by(self,user_id:uuid.UUID,session:Session):
+        return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.friend_id).first())
 
 class InteractionViaType(EnumClass):
     telephone = 'telephone'
@@ -83,6 +90,10 @@ class InteractionLog(Base):
     talking_points: Mapped[Optional[str]]
     ask_again: Mapped[bool]
 
+    def accessible_by(self,user_id:uuid.UUID,session:Session):
+        return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.friend_id).first())
+
+
 class ImportantEventAPI(BaseModel):
     pass
 @create_pydantic(globals(),suffix='API',default_type=uuid.UUID)
@@ -92,6 +103,9 @@ class ImportantEvent(Base):
     date: Mapped[date]
     name: Mapped[str]
     description: Mapped[Optional[str]]
+
+    def accessible_by(self,user_id:uuid.UUID,session:Session):
+        return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.friend_id).first())
 
     @property
     def is_upcoming(self):
@@ -110,9 +124,17 @@ class TalkingPoint(Base):
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
     point: Mapped[str]
 
+    def accessible_by(self,user_id:uuid.UUID,session:Session):
+        return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.friend_id).first())
+
+
 class DemoData(Base):
     __tablename__ = "demo_data"
     user_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
+
+    def accessible_by(self,user_id:uuid.UUID,session:Session):
+        return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.friend_id).first())
+
 
 

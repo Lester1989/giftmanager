@@ -1,0 +1,44 @@
+{% extends 'base.html' %} {% block content %}
+<div class="w-1/2">
+    <div class="panel">
+        <h1 class="text-2xl font-bold mb-4">{{ txt_settings }}</h1>
+        <form class="max-w-sm mx-auto" method="post" action="/settings">
+            <div class="mb-4">
+                <input type="checkbox" id="christmas_reminder" name="christmas_reminder" class="form-field" {% if current_user.settings.get('christmas_reminder',True) %} checked {% endif %} />
+                <label for="christmas_reminder" class="block text-gray-700 text-sm font-bold mb-2">{{ txt_christmas_reminder }}</label>
+            </div>
+            <div class="mb-4">
+                <label for="christmas_reminder_days" class="block text-gray-700 text-sm font-bold mb-2">{{ txt_christmas_reminder_days }}</label>
+                <input type="number" id="christmas_reminder_days" name="christmas_reminder_days" class="form-field" value="{{ current_user.settings.get('christmas_reminder_days',30)}}" max="80" min="0" />
+            </div>
+            <div class="mb-4">
+                <label for="days_advance" class="block text-gray-700 text-sm font-bold mb-2">{{ txt_days_advance }}</label>
+                <input type="number" id="days_advance" name="days_advance" class="form-field" value="{{ current_user.settings.get('days_advance',50)}}" max="365" min="7" />
+            </div>
+            <div class="mb-4">
+                <label for="days_late_reminder" class="block text-gray-700 text-sm font-bold mb-2">{{ txt_days_late_reminder }}</label>
+                <input type="number" id="days_late_reminder" name="days_late_reminder" class="form-field" value="{{ current_user.settings.get('days_late_reminder',-3)}}" max="0" min="-14" />
+            </div>
+            <div class="mb-4">
+                <label for="birthday_reminder_days" class="block text-gray-700 text-sm font-bold mb-2">{{ txt_birthday_reminder_days }}</label>
+                <input type="number" id="birthday_reminder_days" name="birthday_reminder_days" class="form-field" value="{{ current_user.settings.get('birthday_reminder_days',14)}}" max="50" min="0" />
+            </div>
+            <div class="mb-4">
+                <label for="keep_in_touch_interval" class="block text-gray-700 text-sm font-bold mb-2">{{ txt_keep_in_touch_interval }}</label>
+                <input type="number" id="keep_in_touch_interval" name="keep_in_touch_interval" class="form-field" value="{{ current_user.settings.get('keep_in_touch_interval',14)}}" max="90" min="1" />
+            </div>
+            <div class="mb-4">
+                <label for="minimum_gift_ideas" class="block text-gray-700 text-sm font-bold mb-2">{{ txt_minimum_gift_ideas }}</label>
+                <input type="number" id="minimum_gift_ideas" name="minimum_gift_ideas" class="form-field" value="{{ current_user.settings.get('minimum_gift_ideas',1)}}" max="5" min="1" />
+            </div>
+            <div class="mb-4">
+                <label for="flag_important_event_days" class="block text-gray-700 text-sm font-bold mb-2">{{ txt_flag_important_event_days }}</label>
+                <input type="number" id="flag_important_event_days" name="flag_important_event_days" class="form-field" value="{{ current_user.settings.get('flag_important_event_days',5)}}" max="30" min="1" />
+            </div>
+
+
+            <button type="submit" class="btn-rainbow">{{ txt_save }}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

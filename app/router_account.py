@@ -82,11 +82,6 @@ async def confirm_registration_get(request: Request,registration_id:str,user_id:
     generate_demo_data(db.session,db_user.id)
     return templates.TemplateResponse("register_activated.html", {"request": request}|get_translations(request))
 
-@app.get("/remove_demo_data", response_class=RedirectResponse)
-async def remove_demo_data_get(request: Request, current_user: User = Depends(auth.get_current_active_user)):
-    remove_demo_data(db.session,current_user.id)
-    return RedirectResponse(url='/friends', status_code=status.HTTP_303_SEE_OTHER)
-
 @app.get("/password_reset", response_class=HTMLResponse)
 async def password_reset_get(request: Request):
     return templates.TemplateResponse("password_reset.html", {"request": request}|get_translations(request))

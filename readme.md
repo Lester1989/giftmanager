@@ -19,6 +19,7 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [ ] add tests
 - [X] dockerize
 - [X] Authentication
+- [ ] change navigation when not logged in
 - [X] create friend detail views
 - [X] create friend edit views
 - [X] create delete routes
@@ -26,16 +27,16 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [ ] add contact (whatsapp, facebook, call, mailto) links for friends
 - [X] add talkingpoints to friends
 - [X] create calendar view
-- [ ] use calendar icons for events
+- [X] use calendar icons for events REJECTED
 - [X] add event creation
 - [X] add gift creation
 - [X] hide/show chips
 - [ ] make landing page suggest to contact friend about a topic
-- [ ] filter events by time
+- [X] filter events by time
 - [X] add login to DB
 - [X] connect login to system
-- [ ] add settings page
-- [ ] add settings for time thresolds
+- [X] add settings page
+- [X] add settings for time thresolds
 - [X] add registration and add registration emails
 - [X] add DEMO Data for each new account
 - [ ] add Onboarding

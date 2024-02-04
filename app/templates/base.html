@@ -39,6 +39,9 @@
                 </a>
 
                 <div class="flex w-1/2 justify-end content-center">
+                    <span class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">
+                    {{ request.session }}
+                    </span>
                     <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
                         href="/test_mail">
                         Test
@@ -57,6 +60,11 @@
                         href="/calendar">
                         {{ txt_calendar }}
                     </a>
+                    <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+                        href="/settings">
+                        {{ txt_settings }}
+                    </a>
+
                 </div>
             </div>
         </div>

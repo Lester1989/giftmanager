@@ -13,11 +13,30 @@ app = APIRouter()
 
 
 @app.get("/calendar", response_class=HTMLResponse)
-def get_calendar(request: Request,current_user: User = Depends(auth.get_current_active_user)):
+def get_calendar(request: Request,current_user: User = Depends(auth.get_current_active_user),days_advance:int=-1):
+    friends = db.session.query(Friend).filter(UserFriend.friend_id == Friend.id, UserFriend.login_id == current_user.id).all()
     friend_names = {
         friend.id: f"{friend.first_name} {friend.last_name}"
-        for friend in db.session.query(Friend).filter(UserFriend.friend_id == Friend.id, UserFriend.login_id == current_user.id).all()
+        for friend in friends
     }
     important_events = db.session.query(ImportantEvent).filter(UserFriend.friend_id == ImportantEvent.friend_id, UserFriend.login_id == current_user.id).all()
-    return templates.TemplateResponse("calendar.html", {"request": request, "important_events": important_events, "friend_names": friend_names}|get_translations(request))
+    translations = get_translations(request)
+    for friend in friends:
+        important_events.append(ImportantEvent(
+            friend_id=friend.id,
+            date=friend.birthday,
+            name=f"{friend.first_name} {friend.last_name}'s Birthday",
+            description=translations['txt_receives_birthday_gift'] if friend.receives_birthday_gift else ""
+        ))
+        if friend.receives_christmas_gift and current_user.settings.get('christmas_reminder',True):
+            important_events.append(ImportantEvent(
+                friend_id=friend.id,
+                date=date(friend.birthday.year,12,24),
+                name=f"{friend.first_name} {friend.last_name}'s Christmas",
+                description=translations['txt_receives_christmas_gift']
+            ))
+    if days_advance == -1:
+        days_advance = current_user.settings.get('days_advance',50)
+    important_events = [event for event in important_events if event.days_until < days_advance and event.days_until >= current_user.settings.get('days_late_reminder',-3)]
+    return templates.TemplateResponse("calendar.html", {"request": request, "important_events": important_events, "friend_names": friend_names}|translations)
 
