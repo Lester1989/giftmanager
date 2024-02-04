@@ -1,5 +1,5 @@
 from sqlalchemy.orm import DeclarativeBase,Session
-from datetime import datetime,date
+from datetime import date
 from typing import List
 from typing import Optional
 from sqlalchemy.orm import Mapped
@@ -76,7 +76,7 @@ class InteractionViaType(EnumClass):
 class InteractionLog(Base):
     __tablename__ = "interaction_log"
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
-    date: Mapped[datetime]
+    date: Mapped[date]
     via: Mapped[InteractionViaType] = mapped_column(type_=EnumDB(InteractionViaType))
     talking_points: Mapped[Optional[str]]
     ask_again: Mapped[bool]

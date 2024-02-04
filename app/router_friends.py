@@ -34,7 +34,7 @@ def get_friends(request: Request,current_user: User = Depends(auth.get_current_a
     has_demo_data = bool(list(db.session.query(DemoData).filter(DemoData.user_id == current_user.id).all()))
     friends_alerts = {
         friend.id:{
-            'days_since_last_interaction':(date.today() -sorted([interaction for interaction in interactions if interaction.friend_id == friend.id],key=lambda x: x.date,reverse=True)[0].date) if interactions else 1000,
+            'days_since_last_interaction':(date.today() -sorted([interaction for interaction in interactions if interaction.friend_id == friend.id],key=lambda x: x.date,reverse=True)[0].date).days if interactions else 1000,
             'important_events': [(important_event.name,important_event.date) for important_event in important_events if important_event.friend_id == friend.id and abs(important_event.days_until)<=current_user.settings.get('flag_important_event_days',5)],
             'gift_ideas': len([gift_idea for gift_idea in gift_ideas if gift_idea.friend_id == friend.id]),
             'days_until_christmas': days_until_christmas if friend.receives_christmas_gift else None,
