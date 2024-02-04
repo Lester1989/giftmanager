@@ -42,7 +42,7 @@ def get_friends(request: Request,current_user: User = Depends(auth.get_current_a
         }
         for friend in friends
     }
-    return templates.TemplateResponse("friend_overview.html", {"request": request, "friends": friends, "friends_alerts": friends_alerts,'has_demo_data':has_demo_data}|get_translations(request))
+    return templates.TemplateResponse("friend_overview.html", {"request": request,"current_user":current_user, "friends": friends, "friends_alerts": friends_alerts,'has_demo_data':has_demo_data}|get_translations(request))
 
 
 @app.post("/add_friend", response_class=RedirectResponse)
@@ -108,6 +108,7 @@ def get_friend(request: Request, friend_id: str,current_user: User = Depends(aut
         "friend_detail.html",
         {
             "request": request,
+            "current_user":current_user,
             "friend": friend,
             "InteractionViaType": InteractionViaType,
             "interactions": interactions,

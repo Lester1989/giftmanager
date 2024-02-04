@@ -45,6 +45,7 @@ def new_interaction(request: Request, friend_id: str,current_user: User = Depend
         {
             "request": request, 
             "friend": friend, 
+            "current_user":current_user,
             "date": datetime.now().strftime("%Y-%m-%dT%H:%M"),
             "InteractionViaType": InteractionViaType,
             "talking_point_suggstions": talking_points,

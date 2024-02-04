@@ -54,7 +54,7 @@ def generate_interaction_logs(session:Session, friend_ids:list[uuid.UUID]):
     session.add_all([
         InteractionLog(
             friend_id=friend_id,
-            date=fake.date_time_this_year(),
+            date=fake.date_this_year(),
             via=random.choice(list(InteractionViaType)),
             talking_points=fake.text(),
             ask_again=random.choice([True, False])

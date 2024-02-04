@@ -102,12 +102,9 @@ async def password_reset_post(request: Request):
 @app.get("/password_reset/{reset_id}/{user_id}", response_class=HTMLResponse)
 async def password_reset_confirm_get(request: Request,reset_id:str,user_id:str):
     db_reset = db.session.query(UserPasswordReset).filter(UserPasswordReset.id == reset_id).first()
-    if not db_reset:
+    if not db_reset or not db_reset.accessible_by(user_id,db.session):
         raise HTTPException(status_code=404, detail="Reset not found")
-    if ( db_user := db.session.query(User) .filter(User.id == user_id, User.email == db_reset.email) .first() ):
-        return templates.TemplateResponse("password_change.html", {"request": request}|get_translations(request))
-    else:
-        raise HTTPException(status_code=404, detail="User not found")
+    return templates.TemplateResponse("password_change.html", {"request": request}|get_translations(request))
 
 @app.post("/password_reset/{reset_id}/{user_id}")
 async def password_reset_confirm_post(request: Request,reset_id:str,user_id:str):

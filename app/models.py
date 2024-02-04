@@ -26,6 +26,9 @@ class UserPasswordReset(Base):
     __tablename__ = "user_password_reset"
     email: Mapped[str]
 
+    def accessible_by(self,user_id:uuid.UUID,session:Session):
+        return bool(session.query(User).filter(User.id == user_id,User.email==self.email).first())
+
 class User(Base):
     __tablename__ = "user"
     email: Mapped[str]
@@ -46,7 +49,7 @@ class Friend(Base):
     address: Mapped[Optional[str]]
     phone_number: Mapped[Optional[str]]
     email: Mapped[str]
-    birthday: Mapped[Optional[datetime]]
+    birthday: Mapped[Optional[date]]
     notes: Mapped[Optional[str]]
     receives_christmas_gift: Mapped[bool]
     receives_birthday_gift: Mapped[bool]
