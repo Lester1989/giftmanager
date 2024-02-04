@@ -22,7 +22,6 @@ import random,string
 
 app = FastAPI()
 app.add_middleware(DBSessionMiddleware, db_url=os.getenv('CONNECTIONSTRING',"sqlite:///app.db"))
-app.add_middleware(SessionMiddleware, secret_key=''.join(random.choice([string.ascii_letters, string.digits, string.punctuation]) for _ in range(50)))
 
 @app.middleware("http")
 async def check_logged_in(request: Request, call_next):
@@ -78,4 +77,5 @@ async def general_exception_handler(request: Request, exc: Exception):
     return templates.TemplateResponse("error.html", {"request": request,"error_message":exc},status_code=500)
 
 
+app.add_middleware(SessionMiddleware, secret_key=''.join(random.choice([string.ascii_letters, string.digits, string.punctuation]) for _ in range(50)))
 
