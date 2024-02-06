@@ -19,12 +19,12 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [ ] add tests
 - [X] dockerize
 - [X] Authentication
-- [ ] change navigation when not logged in
+- [X] change navigation when not logged in
 - [X] create friend detail views
 - [X] create friend edit views
 - [X] create delete routes
 - [X] use create form
-- [ ] add contact (whatsapp, facebook, call, mailto) links for friends
+- [X] REJECTED FOR NOTES add contact (whatsapp, facebook, call, mailto) links for friends
 - [X] add talkingpoints to friends
 - [X] create calendar view
 - [X] use calendar icons for events REJECTED
@@ -39,8 +39,11 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [X] add settings for time thresolds
 - [X] add registration and add registration emails
 - [X] add DEMO Data for each new account
-- [ ] add Onboarding
+- [X] add Onboarding
 - [X] add Localization
+- [X] redirect to login on unauthorized error
+- [X] add error handling
+- [ ] add pydantic forms violations errorhandling
 
 # Pending Refactorings and Maintenance
 

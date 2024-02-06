@@ -42,6 +42,7 @@ async def login_post(request: Request):
 async def logout(request: Request):
     response = RedirectResponse(url='/login')
     response.delete_cookie(key="access_token")
+    request.session.clear()
     return response
 
 @app.get("/register", response_class=HTMLResponse)

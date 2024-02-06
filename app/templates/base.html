@@ -1,3 +1,5 @@
+
+{% import 'icons.j2' as icons %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,8 +11,11 @@
     <meta name="description" content="" />
     <meta name="keywords" content="" />
 
+    <!-- Sheperd for better first user experience -->
+    <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
+    
     <link rel="stylesheet" href="/static/style.css" />
-    <!--Replace with your tailwind.css once created-->
     {% block header %}
     {% endblock %}
 
@@ -32,7 +37,7 @@
         <div class="w-full container mx-auto">
             <div class="w-full flex items-center justify-between">
                 <a class="flex items-center text-primary-100 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
-                    href="#">
+                    href="/home" id="home">
                     <span class="bg-clip-text text-transparent bg-gradient-to-r from-tertiary-700 via-secondary-500 to-primary-500">
                     {{ txt_page_title }}
                     </span>
@@ -40,13 +45,13 @@
 
                 <div class="flex w-1/2 justify-end content-center">
                     {% if request.session.get('logged_in',False) %}
-                    <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+                    {# <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
                         href="/test_mail">
                         Test
-                    </a>
+                    </a> #}
                     {% if has_demo_data %}
                     <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
-                        href="/remove_demo_data">
+                        href="/remove_demo_data" id="remove-demo-data">
                         {{ txt_remove_demo_data }}
                     </a>
                     {% endif %}
@@ -55,13 +60,19 @@
                         {{ txt_friends }}
                     </a>
                     <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
-                        href="/calendar">
+                        href="/calendar" id="open-calendar">
                         {{ txt_calendar }}
                     </a>
                     <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
-                        href="/settings">
+                        href="/settings" id="open-settings">
                         {{ txt_settings }}
                     </a>
+                    
+                    <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+                        href="/activate_tutorial" id="start-tutorial">
+                        {{ icons.help() }}
+                    </a>
+
                     <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
                         href="/logout">
                         {{ txt_logout }}
@@ -81,7 +92,7 @@
         </div>
 
         <!--Main-->
-        <div class="container pt-24 md:pt-36 mx-auto flex flex-wrap flex-col md:flex-row items-start">
+        <div class="container pt-8 md:pt-10 mx-auto flex flex-wrap flex-col md:flex-row items-start">
             {% block content %}
             <!--Left Col-->
             {#

@@ -21,21 +21,24 @@ import random,string
 
 
 app = FastAPI()
-app.add_middleware(DBSessionMiddleware, db_url=os.getenv('CONNECTIONSTRING',"sqlite:///app.db"))
+app.add_middleware(DBSessionMiddleware, db_url=os.getenv('CONNECTIONSTRING',"sqlite:///app.db"),engine_args={"echo":True})
 
 @app.middleware("http")
 async def check_logged_in(request: Request, call_next):
-    if request.url.path == '/login':
+    if request.url.path == '/login' or request.url.path.startswith('/static'):
         return await call_next(request)
     print('check_logged_in',request.url.path)
     try:
         user = await auth.get_current_user(request.cookies.get('access_token',None))
         request.session['logged_in'] = bool(user)
     except auth.NotAuthenticatedException:
-        print('catching NotAuthenticatedException')
+        print('catching NotAuthenticatedException',flush=True)
         request.session['logged_in'] = False
     except HTTPException:
         print('catching HTTPException')
+        request.session['logged_in'] = False
+    except Exception as e:
+        print('catching Exception',e)
         request.session['logged_in'] = False
     if not request.session['logged_in']:
         request.cookies['access_token'] = None
@@ -74,7 +77,15 @@ def test_exception(request: Request):
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception):
     print('general_exception_handler',exc)
-    return templates.TemplateResponse("error.html", {"request": request,"error_message":exc},status_code=500)
+    return templates.TemplateResponse("error.html", {"request": request,"error_message":exc}|get_translations(request),status_code=500)
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    if exc.status_code == 401:
+        return RedirectResponse(url='/login')
+
+    print('HTTPException handler',exc)
+    return templates.TemplateResponse("error.html", {"request": request,"error_message":exc}|get_translations(request),status_code=500)
 
 
 app.add_middleware(SessionMiddleware, secret_key=''.join(random.choice([string.ascii_letters, string.digits, string.punctuation]) for _ in range(50)))

@@ -4,7 +4,7 @@ import pathlib
 import json
 
 locales: dict[str, dict[str, str]] = {
-    file_name.stem.lower(): json.loads(file_name.read_text())
+    file_name.stem.lower(): json.loads(file_name.read_text(encoding='utf-8'))
     for file_name in pathlib.Path('app/', 'locale').iterdir()
 }
 templates = Jinja2Templates(directory="app/templates")

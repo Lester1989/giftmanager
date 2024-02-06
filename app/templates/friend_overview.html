@@ -5,62 +5,69 @@
 <div class="flex flex-col w-full xl:w-3/5 justify-center lg:items-start overflow-y-hidden">
     <div class="panel">
         <h1 class="text-2xl font-bold mb-4">{{ txt_friends }}</h1>
-        <ul class="space-y-2">
+        <ul class="space-y-2" id="friend-list">
             {% if not friends %}
-            <li><a href="/generate_demo_data" class="text-primary-500 hover:underline" >{{ txt_generate_demo_data }}</a></li>
+            <li><a href="/generate_demo_data" class="text-primary-500 hover:underline">{{ txt_generate_demo_data }}</a>
+            </li>
             <li>{{ txt_no_friends }}</li>
             {% endif %}
             {% for friend in friends %}
             <li class="flex items-center">
                 <div class="flex justify-between w-full">
                     <div>{{ friend.first_name }} {{ friend.last_name }}</div>
-                    <div class="flex gap-2">
-                    {% if friend.receives_birthday_gift and friends_alerts[friend.id]['days_until_birthday']<=current_user.settings.get('birthday_reminder_days',20) %}
-                        <div class="chip chip-secondary">
+                    <div class="flex gap-2" {% if loop.first %} id="friend-chips" {% endif %}>
+                        {% if friend.receives_birthday_gift and friends_alerts[friend.id]['days_until_birthday']
+                        <=current_user.settings.get('birthday_reminder_days',20) %} <div class="chip chip-secondary">
                             <span class="">{{ txt_chip_birthday }}</span>
-                        </div>
-                    {% endif %}
-                    {% if friend.receives_christmas_gift and friends_alerts[friend.id]['days_until_christmas']<=current_user.settings.get('christmas_reminder_days',20) %}
-                        <div class="chip chip-secondary">
-                            <span class="">{{ txt_chip_christmas }}</span>
-                        </div>
-                    {% endif %}
-                    {% if friends_alerts[friend.id]['days_since_last_interaction']>=current_user.settings.get('keep_in_touch_interval',14) %}
-                        <div class="chip chip-primary">
-                            <span class="">{{ txt_chip_keep_in_touch }}</span>
-                        </div>
-                    {% endif %}
-                    {% if friends_alerts[friend.id]['important_events'] %}
-                        <div class="chip chip-warning" title="{% for imp_ev,ev_date in friends_alerts[friend.id]['important_events'] %}{{imp_ev}}({{ev_date}}), {% endfor %}">
-                            <span class="">{{ txt_chip_important_date }}</span>
-                        </div>
                     </div>
                     {% endif %}
-                    {% if friends_alerts[friend.id]['gift_ideas']<current_user.settings.get('minimum_gift_ideas',1) %}
-                        <div class="chip chip-warning">
-                            <span class="">{{ txt_chip_gift_ideas }}</span>
-                        </div>
-                    </div>
-                    {% endif %}
-                    <div class="flex gap-2">
-                        <a href="/friends/{{ friend.id }}" class="btn-icon-rainbow">
-                            {{ icons.eye() }}
-                        </a>
-                        <a href="/delete_friend/{{ friend.id }}" class="btn-icon-rainbow">
-                            {{ icons.trash() }}
-                        </a>
-                    </div>
+                    {% if friend.receives_christmas_gift and friends_alerts[friend.id]['days_until_christmas']
+                    <=current_user.settings.get('christmas_reminder_days',20) %} <div class="chip chip-secondary">
+                        <span class="">{{ txt_chip_christmas }}</span>
                 </div>
-            </li>
-            {% endfor %}
-        </ul>
+                {% endif %}
+                {% if
+                friends_alerts[friend.id]['days_since_last_interaction']>=current_user.settings.get('keep_in_touch_interval',14)
+                %}
+                <div class="chip chip-primary">
+                    <span class="">{{ txt_chip_keep_in_touch }}</span>
+                </div>
+                {% endif %}
+                {% if friends_alerts[friend.id]['important_events'] %}
+                <div class="chip chip-warning"
+                    title="{% for imp_ev,ev_date in friends_alerts[friend.id]['important_events'] %}{{imp_ev}}({{ev_date}}), {% endfor %}">
+                    <span class="">{{ txt_chip_important_date }}</span>
+                </div>
     </div>
+    {% endif %}
+    {% if friends_alerts[friend.id]['gift_ideas']<current_user.settings.get('minimum_gift_ideas',1) %} 
+    <div class="chip chip-warning" title="Minimum: {{friends_alerts[friend.id]['gift_ideas']}} < {{ current_user.settings.get('minimum_gift_ideas',1)}} ">
+        <span class="">{{ txt_chip_gift_ideas }}</span>
+</div>
+</div>
+{% endif %}
+<div class="flex gap-2" {% if loop.first %} id="friend-actions" {% endif %}>
+    <a href="/friends/{{ friend.id }}" class="btn-icon-rainbow w-10 h-10">
+        {{ icons.eye() }}
+    </a>
+    <a href="/new_interaction/{{ friend.id }}" class="btn-icon-rainbow text-2xl w-10 h-10 py-1 text-center">
+        +
+    </a>
+    <a href="/delete_friend/{{ friend.id }}" class="btn-icon-rainbow w-10 h-10">
+        {{ icons.trash() }}
+    </a>
+</div>
+</div>
+</li>
+{% endfor %}
+</ul>
+</div>
 </div>
 
 <div class="w-full xl:w-2/5 px-12 overflow-hidden">
     <div class="panel">
         <h2 class="text-xl font-bold mb-4">{{ txt_add_new_friend }}</h2>
-        <form action="/add_friend" method="post">
+        <form action="/add_friend" method="post" id="friend-new-form">
             {% set friend=False %}
             {% include "friend_form.html" %}
             <button type="submit" class="btn-rainbow">{{ txt_add_friend }}</button>
@@ -68,4 +75,149 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block javascript %}
+<script lang="javascript">
+    const tour = new Shepherd.Tour({
+        useModalOverlay: true,
+        defaultStepOptions: {
+            classes: 'shadow-md bg-gray-100',
+            scrollTo: { behavior: 'smooth', block: 'center' },
+            cancelIcon: {
+                enabled: true
+            }
+        }
+    });
+
+    const all_buttons = [
+        {
+            text: 'Next',
+            classes: 'btn-rainbow',
+            action: tour.next
+        },
+        {
+            text: 'Back',
+            classes: 'btn-rainbow',
+            action: tour.back
+        }
+    ]
+
+    const step_welcome = {
+        id: 'sheperd-welcome',
+        text: '{{ txt_tour_welcome }}',
+        beforeShowPromise: (()=> new Promise(resolve => fetch('/set_tutorial_step/sheperd-welcome').then(resolve))),
+        attachTo: {
+            element: '#start-tutorial',
+            on: 'top-start'
+        },
+        buttons: all_buttons.slice(0, 1)
+    };
+
+    const step_friend_list = {
+        id: 'sheperd-friend-list',
+        text: '{{ txt_tour_friend_list }}',
+        beforeShowPromise: (()=> new Promise(resolve => fetch('/set_tutorial_step/sheperd-friend-list').then(resolve))),
+        attachTo: {
+            element: '#friend-list',
+            on: 'top-start'
+        },
+        buttons: all_buttons
+    };
+
+    const step_friend_chips = {
+        id: 'sheperd-friend-chips',
+        text: '{{ txt_tour_friend_chips }}',
+        beforeShowPromise: (()=> new Promise(resolve => fetch('/set_tutorial_step/sheperd-friend-chips').then(resolve))),
+        attachTo: {
+            element: '#friend-chips',
+            on: 'right'
+        },
+        buttons: all_buttons
+    };
+
+    const step_friend_actions = {
+        id: 'sheperd-friend-actions',
+        text: '{{ txt_tour_friend_actions }}',
+        beforeShowPromise: (()=> new Promise(resolve => fetch('/set_tutorial_step/sheperd-friend-actions').then(resolve))),
+        attachTo: {
+            element: '#friend-actions',
+            on: 'left'
+        },
+        buttons: all_buttons
+    };
+
+    const step_friend_new_form = {
+        id: 'sheperd-friend-new-form',
+        text: '{{ txt_tour_friend_new_form }}',
+        beforeShowPromise: (()=> new Promise(resolve => fetch('/set_tutorial_step/sheperd-friend-new-form').then(resolve))),
+        attachTo: {
+            element: '#friend-new-form',
+            on: 'left'
+        },
+        buttons: all_buttons
+    };
+
+    const step_home_link = {
+        id: 'sheperd-home-link',
+        text: '{{ txt_tour_home_link }}',
+        beforeShowPromise: (()=> new Promise(resolve => fetch('/set_tutorial_step/sheperd-home-link').then(resolve))),
+        attachTo: {
+            element: '#home',
+            on: 'bottom'
+        },
+        buttons: all_buttons
+    };
+
+    const step_remove_demo_data = {
+        id: 'sheperd-remove-demo-data',
+        text: '{{ txt_tour_remove_demo_data }}',
+        beforeShowPromise: (()=> new Promise(resolve => fetch('/set_tutorial_step/sheperd-remove-demo-data').then(resolve))),
+        attachTo: {
+            element: '#remove-demo-data',
+            on: 'bottom'
+        },
+        buttons: all_buttons
+    };
+
+    const step_open_calendar = {
+        id: 'sheperd-open-calendar',
+        text: '{{ txt_tour_open_calendar }}',
+        beforeShowPromise: (()=> new Promise(resolve => fetch('/set_tutorial_step/sheperd-open-calendar').then(resolve))),
+        attachTo: {
+            element: '#open-calendar',
+            on: 'bottom'
+        },
+        buttons: all_buttons
+    };
+
+    const step_open_settings = {
+        id: 'sheperd-open-settings',
+        text: '{{ txt_tour_open_settings }}',
+        beforeShowPromise: (()=> new Promise(resolve => fetch('/set_tutorial_step/sheperd-open-settings').then(resolve))),
+        attachTo: {
+            element: '#open-settings',
+            on: 'bottom'
+        },
+        buttons: all_buttons
+    };
+
+    tour.addStep(step_welcome);
+    tour.addStep(step_friend_list);
+    tour.addStep(step_friend_chips);
+    tour.addStep(step_friend_actions);
+    tour.addStep(step_friend_new_form);
+    tour.addStep(step_home_link);
+    tour.addStep(step_open_calendar);
+    tour.addStep(step_open_settings);
+    tour.addStep(step_remove_demo_data);
+    console.log("{{current_user.settings}}");
+    if ({{current_user.settings.get('show_tutorial',True) | lower}}) {
+        tour.show("{{current_user.settings.get('tutorial_step','sheperd-welcome')}}");
+    }
+
+    ['complete', 'cancel'].forEach(event => tour.on(event, () => {
+        fetch('/deactivate_tutorial')
+    }));
+</script>
 {% endblock %}

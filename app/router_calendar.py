@@ -44,5 +44,5 @@ def get_calendar(request: Request,current_user: User = Depends(auth.get_current_
     if days_advance == -1:
         days_advance = current_user.settings.get('days_advance',50)
     important_events = [event for event in important_events if event.days_until < days_advance and event.days_until >= current_user.settings.get('days_late_reminder',-3)]
-    return templates.TemplateResponse("calendar.html", {"request": request, "current_user":current_user, "important_events": important_events, "friend_names": friend_names}|translations)
+    return templates.TemplateResponse("calendar.html", {"request": request, "current_user":current_user, "important_events": sorted(important_events,key=lambda event:event.days_until), "friend_names": friend_names}|translations)
 

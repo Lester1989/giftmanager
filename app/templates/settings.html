@@ -3,8 +3,8 @@
     <div class="panel">
         <h1 class="text-2xl font-bold mb-4">{{ txt_settings }}</h1>
         <form class="max-w-sm mx-auto" method="post" action="/settings">
-            <div class="mb-4">
-                <input type="checkbox" id="christmas_reminder" name="christmas_reminder" class="form-field" {% if current_user.settings.get('christmas_reminder',True) %} checked {% endif %} />
+            <div class="mb-4 flex flex-row gap-4">
+                <input type="checkbox" id="christmas_reminder" name="christmas_reminder"  {% if current_user.settings.get('christmas_reminder',True) %} checked {% endif %} />
                 <label for="christmas_reminder" class="block text-gray-700 text-sm font-bold mb-2">{{ txt_christmas_reminder }}</label>
             </div>
             <div class="mb-4">

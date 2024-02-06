@@ -3,7 +3,7 @@ from fastapi import APIRouter, Form,Request
 from fastapi import HTTPException,Depends,status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi_sqlalchemy import db
-from datetime import datetime, timedelta,date
+from datetime import date
 from ulid import new as new_ulid
 from app.models import User,Friend,UserFriend,GiftIdea,InteractionLog,ImportantEvent,InteractionViaType,TalkingPoint
 from app.template_loading import templates,get_translations
@@ -46,7 +46,7 @@ def new_interaction(request: Request, friend_id: str,current_user: User = Depend
             "request": request, 
             "friend": friend, 
             "current_user":current_user,
-            "date": datetime.now().strftime("%Y-%m-%dT%H:%M"),
+            "date": date.today(),
             "InteractionViaType": InteractionViaType,
             "talking_point_suggstions": talking_points,
             "gift_ideas": gift_ideas,
@@ -54,11 +54,11 @@ def new_interaction(request: Request, friend_id: str,current_user: User = Depend
         }|get_translations(request))
 
 @app.post("/add_interaction/{friend_id}", response_class=RedirectResponse)
-def add_interaction(request: Request, friend_id: str, date: datetime = Form(datetime.now()), via: InteractionViaType = Form(InteractionViaType.telephone), talking_points: str = Form(""), ask_again: bool = Form(False),current_user: User = Depends(auth.get_current_active_user)):
+async def add_interaction(request: Request, friend_id: str, date_arg: date = Form(date.today()), via: InteractionViaType = Form(InteractionViaType.telephone), talking_points: str = Form(""), ask_again: bool = Form(False),current_user: User = Depends(auth.get_current_active_user)):
     friend:Friend = db.session.query(Friend).get(friend_id)
     if not friend or not friend.accessible_by(current_user.id,db.session):
         raise HTTPException(status_code=404, detail="Friend not found for this User")
-    interaction = InteractionLog(friend_id=friend_id, date=date, via=via, talking_points=talking_points, ask_again=ask_again)
+    interaction = InteractionLog(friend_id=friend_id, date=date_arg, via=via, talking_points=talking_points, ask_again=ask_again)
     db.session.add(interaction)
     db.session.commit()
     return RedirectResponse(url=f'/friends/{friend_id}', status_code=status.HTTP_302_FOUND)

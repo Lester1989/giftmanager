@@ -1,10 +1,12 @@
-<div class="mb-4">
-    <label for="first_name" class="block font-bold">{{ txt_first_name }}:</label>
-    <input class="form-field " type="text" id="first_name" name="first_name" value="{{ friend.first_name if friend else '' }}">
-</div>
-<div class="mb-4">
-    <label for="last_name" class="block font-bold">{{ txt_last_name }}:</label>
-    <input class="form-field" type="text" id="last_name" name="last_name" value="{{ friend.last_name if friend else '' }}">
+<div class="grid grid-cols-2 gap-4">
+    <div class="mb-4">
+        <label for="first_name" class="block font-bold">{{ txt_first_name }}:</label>
+        <input class="form-field " type="text" id="first_name" name="first_name" value="{{ friend.first_name if friend else '' }}">
+    </div>
+    <div class="mb-4">
+        <label for="last_name" class="block font-bold">{{ txt_last_name }}:</label>
+        <input class="form-field" type="text" id="last_name" name="last_name" value="{{ friend.last_name if friend else '' }}">
+    </div>
 </div>
 <div class="mb-4">
     <label for="address" class="block font-bold">{{ txt_address }}:</label>
@@ -27,13 +29,11 @@
     <label for="notes" class="block font-bold">{{ txt_notes }}:</label>
     <textarea class="form-field" id="notes" name="notes">{{ friend.notes if friend else '' }}</textarea>
 </div>
-<div class="mb-4">
+<div class="mb-4 flex flex-row gap-4">
     <label for="receives_christmas_gift" class="block font-bold">{{ txt_receives_christmas_gift}}:</label>
-    <input type="checkbox" id="receives_christmas_gift" name="receives_christmas_gift"
-        value="{{ friend.receives_christmas_gift if friend else False }}">
+    <input type="checkbox" id="receives_christmas_gift" name="receives_christmas_gift" {% if friend.receives_christmas_gift %} checked {% endif %}>
 </div>
-<div class="mb-4">
+<div class="mb-4 flex flex-row gap-4">
     <label for="receives_birthday_gift" class="block font-bold">{{ txt_receives_birthday_gift }}:</label>
-    <input type="checkbox" id="receives_birthday_gift" name="receives_birthday_gift"
-        value="{{ friend.receives_birthday_gift if friend else False }}">
+    <input type="checkbox" id="receives_birthday_gift" name="receives_birthday_gift" {% if friend.receives_birthday_gift %} checked {% endif %}>
 </div>

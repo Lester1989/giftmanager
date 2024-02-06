@@ -8,8 +8,12 @@
         {% for important_event in important_events %}
         <div class="grid grid-cols-5 bg-primary-900 p-4 m-2 rounded-md shadow-lg shadow-blue-500">
             <div class="col-span-4 flex flex-col">
-                {{ friend_names[important_event.friend_id] }}
+                <span>
+                    {{ friend_names[important_event.friend_id] }}
+                </span>
+                <span>
                 {{ important_event.name }}
+                </span>
             </div>
             <div class="col-span-1 flex flex-col">
                 <div class="text-xs">
