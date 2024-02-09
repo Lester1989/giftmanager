@@ -54,6 +54,49 @@ class Friend(Base):
     receives_christmas_gift: Mapped[bool]
     receives_birthday_gift: Mapped[bool]
 
+    def to_dict(self):
+        return {
+            "first_name":self.first_name,
+            "last_name":self.last_name,
+            "address":self.address,
+            "phone_number":self.phone_number,
+            "email":self.email,
+            "birthday":self.birthday,
+            "notes":self.notes,
+            "receives_christmas_gift":self.receives_christmas_gift,
+            "receives_birthday_gift":self.receives_birthday_gift,
+        }
+
+    @property
+    def next_birthday(self):
+        today = date.today()
+        next_birthday_date = self.birthday.replace(year=today.year)
+        if next_birthday_date < today:
+            next_birthday_date = next_birthday_date.replace(year=today.year+1)
+        return next_birthday_date
+
+    def special_events(self)->list['ImportantEvent']:
+        events = [
+            ImportantEvent(
+                friend_id=self.id,
+                date=self.next_birthday,
+                name=f"{self.first_name}'s Birthday",
+                description="",
+                requires_gift=self.receives_birthday_gift
+            )
+        ]
+        if self.receives_christmas_gift:
+            events.append(
+                ImportantEvent(
+                    friend_id=self.id,
+                    date=date(date.today().year,12,24),
+                    name=f"{self.first_name}'s Christmas",
+                    description="",
+                    requires_gift=True
+                )
+            )
+        return events
+
     def accessible_by(self,user_id:uuid.UUID,session:Session):
         return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.id).first())
 
@@ -61,7 +104,15 @@ class GiftIdea(Base):
     __tablename__ = "gift_idea"
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
     name: Mapped[str]
-    done: Mapped[bool]
+    used_on: Mapped[Optional[date]] = mapped_column(default=None,nullable=True)
+    obtained: Mapped[bool] = mapped_column(default=False,server_default='false')
+
+    def to_dict(self):
+        return {
+            "name":self.name,
+            "obtained":self.obtained,
+            "used_on":self.used_on.isoformat() if self.used_on else "",
+        }
 
     def accessible_by(self,user_id:uuid.UUID,session:Session):
         return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.friend_id).first())
@@ -81,6 +132,14 @@ class InteractionLog(Base):
     talking_points: Mapped[Optional[str]]
     ask_again: Mapped[bool]
 
+    def to_dict(self):
+        return {
+            "date":self.date,
+            "via":self.via.value,
+            "talking_points":self.talking_points,
+            "ask_again":self.ask_again,
+        }
+
     def accessible_by(self,user_id:uuid.UUID,session:Session):
         return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.friend_id).first())
 
@@ -91,6 +150,15 @@ class ImportantEvent(Base):
     date: Mapped[date]
     name: Mapped[str]
     description: Mapped[Optional[str]]
+    requires_gift: Mapped[bool] = mapped_column(default=False,server_default='false')
+
+    def to_dict(self):
+        return {
+            "date":self.date,
+            "name":self.name,
+            "description":self.description,
+            "requires_gift":self.requires_gift,
+        }
 
     def accessible_by(self,user_id:uuid.UUID,session:Session):
         return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.friend_id).first())
@@ -108,6 +176,11 @@ class TalkingPoint(Base):
     __tablename__ = "talking_point"
     friend_id: Mapped[uuid.UUID] = mapped_column(type_=UUID(as_uuid=True))
     point: Mapped[str]
+
+    def to_dict(self):
+        return {
+            "point":self.point,
+        }
 
     def accessible_by(self,user_id:uuid.UUID,session:Session):
         return bool(session.query(UserFriend).filter(UserFriend.login_id == user_id,UserFriend.friend_id == self.friend_id).first())

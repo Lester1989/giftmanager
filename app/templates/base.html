@@ -14,7 +14,7 @@
     <!-- Sheperd for better first user experience -->
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
-    
+
     <link rel="stylesheet" href="/static/style.css" />
     {% block header %}
     {% endblock %}
@@ -67,12 +67,10 @@
                         href="/settings" id="open-settings">
                         {{ txt_settings }}
                     </a>
-                    
                     <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
                         href="/activate_tutorial" id="start-tutorial">
                         {{ icons.help() }}
                     </a>
-
                     <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
                         href="/logout">
                         {{ txt_logout }}
@@ -94,6 +92,24 @@
         <!--Main-->
         <div class="container pt-8 md:pt-10 mx-auto flex flex-wrap flex-col md:flex-row items-start">
             {% block content %}
+<div class="flex flex-col xl:w-1/4 justify-center lg:items-start mx-auto overflow-y-hidden">
+    <div class="panel">
+        <h1 class="text-2xl font-bold mb-4">{{ txt_tips_gifts }}</h1>
+        Coming soon
+    </div>
+</div>
+<div class="flex flex-col xl:w-1/4 justify-center lg:items-start mx-auto overflow-y-hidden">
+    <div class="panel">
+        <h2 class="text-2xl font-bold mb-4">{{ txt_interaction_ideas }}</h1>
+        Coming soon
+    </div>
+</div>
+<div class="flex flex-col xl:w-1/4 justify-center lg:items-start mx-auto overflow-y-hidden">
+    <div class="panel">
+        <h2 class="text-2xl font-bold mb-4">{{ txt_opener_ideas }}</h1>
+        Coming soon
+    </div>
+</div>
             <!--Left Col-->
             {#
             <div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
@@ -142,7 +158,10 @@
             <!--Footer-->
             <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
                 {% block footer %}
-                <a class="text-gray-500 no-underline hover:no-underline" href="#">&copy; Lukas Jaspaert</a>
+                <a class="text-gray-500 no-underline hover:no-underline" href="https://github.com/Lester1989">&copy; Lukas Jaspaert</a>
+                <div class="text-gray-500 no-underline text-end">
+                    ({{ app_version }})
+                </div>
                 {% endblock %}
             </div>
         </div>

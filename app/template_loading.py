@@ -8,6 +8,7 @@ locales: dict[str, dict[str, str]] = {
     for file_name in pathlib.Path('app/', 'locale').iterdir()
 }
 templates = Jinja2Templates(directory="app/templates")
+templates.env.globals['app_version'] = pathlib.Path('version.txt').read_text(encoding='utf-8').strip()
 
 def get_translations(request:Request)->dict[str,str]:
     requested_languages:list[str] = request.headers.get('Accept-Language','en').split(',')

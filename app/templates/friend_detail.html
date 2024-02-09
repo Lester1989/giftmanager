@@ -36,11 +36,15 @@
         <div class="flex flex-row flex-wrap gap-4">
             <a href="/new_gift_idea?friend_id={{friend.id}}" class="w-32 h-32 border-tertiary-900 hover:border-tertiary-500 border-4 rounded-lg text-9xl text-center hover:text-primary-300">+</a>
             {% for gift in gift_ideas %}
-            <div class="w-32 h-32 border-tertiary-900 hover:border-tertiary-500 border-4 rounded-lg flex flex-col p-1">
-                <div class="text-center text-wrap w-full h-28 overflow-hidden">
-                    {{ gift.name }}
-                    {{ gift.description}}
+            <div class="w-32 h-32 border-tertiary-900 hover:border-tertiary-500 border-4 rounded-lg flex flex-col p-1 relative {% if not gift.used_on and gift.obtained %} shadow-md shadow-tertiary-100 {% endif %}">
+                {% if gift.obtained %}
+                <div class="absolute w-full h-full text-gray-700 -z-10">
+                    {{ icons.check("w-full h-full") if gift.used_on else icons.gift("w-full h-full")}}
                 </div>
+                {% endif %}
+                <a class="text-center text-wrap w-full h-28 overflow-hidden" href="/edit_gift_idea/{{gift.id}}/for/{{friend.id}}" title="{{ txt_edit_gift_idea }}">
+                    {{ gift.name }}
+                </a>
             </div>
             {% endfor %}
         </div>

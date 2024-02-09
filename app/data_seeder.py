@@ -10,6 +10,9 @@ def new_uuid():
 
 fake = Faker()
 
+def generate_random_words(word_count:int):
+    return ' '.join(fake.text().split()[:word_count])
+
 def generate_friends(session:Session, user_id:uuid.UUID):
     friend_ids = []
     for i in range(5):
@@ -46,8 +49,8 @@ def generate_gift_ideas(session:Session, friend_ids:list[uuid.UUID]):
     session.add_all([
         GiftIdea(
             friend_id=friend_id,
-            name=fake.text(),
-            done=random.choice([True, False, False, False])
+            name=generate_random_words(4),
+            obtained=random.choice([True, False, False, False])
         )
         for _ in range(random.choice([0,1,1,1,2,3]))
         for friend_id in friend_ids
@@ -60,10 +63,10 @@ def generate_interaction_logs(session:Session, friend_ids:list[uuid.UUID]):
             friend_id=friend_id,
             date=fake.date_this_year(),
             via=random.choice(list(InteractionViaType)),
-            talking_points=fake.text(),
+            talking_points=generate_random_words(random.randint(4,10)),
             ask_again=random.choice([True, False])
         )
-        for _ in range(random.choice([0,1,1,1,2,3]))
+        for _ in range(random.choice([0,1,2,2,3,4]))
         for friend_id in friend_ids
     ])
     session.commit()
@@ -73,8 +76,9 @@ def generate_important_events(session:Session, friend_ids:list[uuid.UUID]):
         ImportantEvent(
             friend_id=friend_id,
             date=fake.date_this_year(after_today=True),
-            name=fake.text(),
+            name=generate_random_words(random.randint(2,6)),
             description=fake.text(),
+            requires_gift=random.choice([True, False])
         )
         for _ in range(random.choice([0,1,1,1,2,3]))
         for friend_id in friend_ids
@@ -85,7 +89,7 @@ def generate_talking_points(session:Session, friend_ids:list[uuid.UUID]):
     session.add_all([
         TalkingPoint(
             friend_id=friend_id,
-            point=fake.text()
+            point=generate_random_words(random.randint(4,10))
         )
         for _ in range(random.choice([0,1,1,1,2,3]))
         for friend_id in friend_ids

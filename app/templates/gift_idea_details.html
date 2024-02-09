@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block content %}
+<div class="w-1/2">
+  <div class="panel">
+    <h1 class="text-2xl font-bold mb-4">{{ txt_gift_for }} {{ friend.first_name }}</h1>
+    <form class="max-w-sm mx-auto" action="/edit_gift_idea/{{gift_idea.id}}/for/{{friend.id}}" method="post">
+      <div class="mb-4">
+        <label for="name" class="block font-bold" >{{ txt_gift_idea }}</label >
+        <input class="form-field" type="text" name="name" id="name" value="{{ gift_idea.name }}" />
+      </div>
+      <div class="mb-4 flex flex-row gap-4">
+        <label for="obtained" class="block font-bold">{{ txt_obtained}}:</label>
+        <input type="checkbox" id="obtained" name="obtained" {% if gift_idea.obtained %} checked {% endif %}>
+      </div>
+      <div class="mb-4">
+        <label for="used_on" class="block font-bold" >{{ txt_used_on }}</label >
+        <select class="form-field" type="text" name="used_on" id="used_on">
+            <option value=""> {{ txt_not_used_yet }}</option>
+            {% for important_event in important_events %}
+            <option value="{{ important_event.date }}" {% if gift_idea.used_on == important_event.date %} selected {% endif %}>{{ important_event.name }} ({{important_event.date}})</option>
+            {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn-rainbow">{{ txt_save }}</button>
+    </form>
+    <a href="/delete_gift_idea/{{ gift_idea.id }}" class="btn-icon-rainbow w-10 h-10 inline-block">
+        {{ icons.trash() }}
+    </a>
+  </div>
+</div>
+{% endblock %}

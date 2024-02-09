@@ -43,7 +43,14 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [X] add Localization
 - [X] redirect to login on unauthorized error
 - [X] add error handling
+- [X] json import and export
+- [X] add Version Tag to the footer
+- [X] better sorting for friends, dates, gift ideas etc.
 - [ ] add pydantic forms violations errorhandling
+- [ ] automatic backups
+- [ ] link to github and dockerhub
+- [ ] link to be me a coffee or something similar
+- [X] add gift for event
 
 # Pending Refactorings and Maintenance
 

@@ -27,4 +27,4 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 COPY app ./app
 COPY alembic.ini ./alembic.ini
-# COPY version.txt ./version.txt
+COPY version.txt ./version.txt

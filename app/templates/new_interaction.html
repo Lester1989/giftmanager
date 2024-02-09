@@ -69,7 +69,6 @@
     <ul>
       {% for gift_idea in gift_ideas %}
       <li class="mb-2">
-    <a class="rounded-full border-primary-100 p-0 w-9 h-9 border-2" href="/complete_gift_idea/{{gift_idea.id}}">{{ icons.check("inline w-6 h-6") }}</a>
       {{ gift_idea.name }}
       <a class="rounded-full border-primary-100 p-0 w-9 h-9 border-2" href="/delete_gift_idea/{{gift_idea.id}}">{{ icons.x_mark("inline w-6 h-6") }}</a>
       </li>
@@ -104,6 +103,10 @@
         <label for="new_important_event_details" class="block font-bold" >{{ txt_details }}</label >
         <textarea class="form-field" type="text" name="new_important_event_details" id="new_important_event_details"></textarea>
       </div>
+      <div class="mb-4 flex flex-row gap-4">
+        <label for="requires_gift" class="block font-bold">{{ txt_requires_gift}}:</label>
+        <input type="checkbox" id="requires_gift" name="requires_gift">
+    </div>
       <button type="submit" class="btn-rainbow mt-2">{{ txt_save }}</button>
     </form>
   </div>
