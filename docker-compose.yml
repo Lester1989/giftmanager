@@ -1,4 +1,6 @@
 version: '3.4'
+networks:
+  stack_intern:
 
 services:
   fsm:
@@ -15,6 +17,11 @@ services:
     command: sh -c "alembic upgrade head && uvicorn app.main:app --port 8800 --host 0.0.0.0"
     ports:
       - 8800:8800
+    depends_on:
+      - postgres
+    networks:
+      - stack_intern
+
   postgres:
     image: postgres:13.1-alpine
     restart: unless-stopped
@@ -22,6 +29,8 @@ services:
       POSTGRES_USER: friendshipmanager
       POSTGRES_PASSWORD: friendshipmanager
       POSTGRES_DB: friendshipmanager
+    ports:
+      - 5434:5432
     volumes:
       - friendshipmanager_postgres:/var/lib/postgresql/data
     healthcheck:
@@ -30,8 +39,8 @@ services:
       timeout: 30s
       retries: 3
       start_period: 10s
-    ports:
-      - 5434:5432
+    networks:
+      - stack_intern
 
   pgadmin4-browser:
     image: dpage/pgadmin4
@@ -39,8 +48,16 @@ services:
     ports:
       - 8080:80
     environment:
-      PGADMIN_DEFAULT_EMAIL: "l.ester@gmx.de"
+      PGADMIN_DEFAULT_EMAIL: "bla@example.com"
       PGADMIN_DEFAULT_PASSWORD: "friendshipmanager"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - stack_intern
+
 volumes:
   friendshipmanager_static:
   friendshipmanager_postgres:
+  pgadmin-data:

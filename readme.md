@@ -4,11 +4,21 @@ Install poetry with `pip install poetry` if you don't have it already.
 
 run `poetry install` to install dependencies.
 
-start the environment shell with `poetry shell`.
-
-start the server with `uvicorn app.main:app --reload`.
-
 have tailwind watch for changes with `tailwindcss -i input.scss -o app/static/style.css --watch` in another terminal to keep your style up to date.
+
+# Run the app with docker
+
+Run `docker-compose up` to start the app. The app will be available at `http://localhost:8800`.
+
+You can have a look at the database with pgadmin at `http://localhost:8080`. The login is is specified in the `docker-compose.yml` file.
+
+# have a look at my hosted version 
+
+**Warning: This is a development deployment and could loose data due to updates, use the export function to store a local copy of your data!**
+
+[https://friendshipmanager.lesterserver.de/register](https://friendshipmanager.lesterserver.de/register)
+
+
 
 # Changes to the database
 
@@ -16,7 +26,6 @@ If you make changes to the database, you need to run `alembic revision --autogen
 
 # Open TODOs
 
-- [ ] add tests
 - [X] dockerize
 - [X] Authentication
 - [X] change navigation when not logged in
@@ -31,7 +40,6 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [X] add event creation
 - [X] add gift creation
 - [X] hide/show chips
-- [ ] make landing page suggest to contact friend about a topic
 - [X] filter events by time
 - [X] add login to DB
 - [X] connect login to system
@@ -46,11 +54,14 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [X] json import and export
 - [X] add Version Tag to the footer
 - [X] better sorting for friends, dates, gift ideas etc.
+- [X] link to github and dockerhub in about page
+- [X] add gift for event
+- [X] link to be me a coffee or something similar
+- [ ] admin view to see users and a count of their data
+- [ ] add tests
 - [ ] add pydantic forms violations errorhandling
 - [ ] automatic backups
-- [ ] link to github and dockerhub
-- [ ] link to be me a coffee or something similar
-- [X] add gift for event
+- [ ] make landing page suggest to contact friend about a topic
 
 # Pending Refactorings and Maintenance
 

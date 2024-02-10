@@ -4,7 +4,7 @@
 {% block content %}
 <div class="flex flex-col w-full xl:w-3/5 justify-center lg:items-start overflow-y-hidden">
     <div class="panel">
-        <h1 class="text-2xl font-bold mb-4">{{ txt_friends }}<a class="btn-icon-rainbow w-6 h-6 p-1 inline-block" title="{{ txt_download_friends }}" href="/download_friends" download>{{icons.download("w-4 h-4")}}</a></h1>
+        <h1 class="text-2xl font-bold mb-4">{{ txt_friends }}<a id="friends-download" class="btn-icon-rainbow w-6 h-6 p-1 inline-block" title="{{ txt_download_friends }}" href="/download_friends" download>{{icons.download("w-4 h-4")}}</a></h1>
         <ul class="space-y-2" id="friend-list">
             {% if not friends %}
             <li>
@@ -62,7 +62,7 @@
 
 <div class="w-full xl:w-2/5 px-12 overflow-hidden">
     <div class="panel">
-        <h2 class="text-xl font-bold mb-4">{{ txt_add_new_friend }} <a class="btn-icon-rainbow w-6 h-6 p-1 inline-block" title="{{ txt_upload_friends }}" href="/upload_friends">{{icons.upload("w-4 h-4")}}</a></h2>
+        <h2 class="text-xl font-bold mb-4">{{ txt_add_new_friend }} <a id="friends-upload" class="btn-icon-rainbow w-6 h-6 p-1 inline-block" title="{{ txt_upload_friends }}" href="/upload_friends">{{icons.upload("w-4 h-4")}}</a></h2>
         <form action="/add_friend" method="post" id="friend-new-form">
             {% set friend=False %}
             {% include "friend_form.html" %}
@@ -198,6 +198,39 @@
         buttons: all_buttons
     };
 
+    const step_download_friends = {
+        id: 'sheperd-download-friends',
+        text: '{{ txt_tour_download_friends }}',
+        beforeShowPromise: (() => new Promise(resolve => fetch('/set_tutorial_step/sheperd-download-friends').then(resolve))),
+        attachTo: {
+            element: '#friends-download',
+            on: 'bottom'
+        },
+        buttons: all_buttons
+    };
+
+    const step_upload_friends = {
+        id: 'sheperd-upload-friends',
+        text: '{{ txt_tour_upload_friends }}',
+        beforeShowPromise: (() => new Promise(resolve => fetch('/set_tutorial_step/sheperd-upload-friends').then(resolve))),
+        attachTo: {
+            element: '#friends-upload',
+            on: 'bottom'
+        },
+        buttons: all_buttons
+    };
+
+    const step_about_page = {
+        id: 'sheperd-about-page',
+        text: '{{ txt_tour_about_page }}',
+        beforeShowPromise: (() => new Promise(resolve => fetch('/set_tutorial_step/sheperd-about-page').then(resolve))),
+        attachTo: {
+            element: '#about-page',
+            on: 'bottom'
+        },
+        buttons: all_buttons
+    };
+
     tour.addStep(step_welcome);
     tour.addStep(step_friend_list);
     tour.addStep(step_friend_chips);
@@ -206,7 +239,10 @@
     tour.addStep(step_home_link);
     tour.addStep(step_open_calendar);
     tour.addStep(step_open_settings);
+    tour.addStep(step_download_friends);
+    tour.addStep(step_upload_friends);
     tour.addStep(step_remove_demo_data);
+    tour.addStep(step_about_page);
     console.log("{{current_user.settings}}");
     if ({{ current_user.settings.get('show_tutorial', True) | lower }}) {
         tour.show("{{current_user.settings.get('tutorial_step','sheperd-welcome')}}");

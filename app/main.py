@@ -60,6 +60,9 @@ app.include_router(settings_router)
 def landing_redirect():
     return RedirectResponse(url='/home')
 
+@app.get("/about", response_class=HTMLResponse)
+def about(request: Request):
+    return templates.TemplateResponse("about.html", {"request": request}|get_translations(request))
 
 @app.get("/home", response_class=HTMLResponse)
 def home(request: Request):
