@@ -17,6 +17,7 @@ from app.router_gift import app as gift_router
 from app.router_important_event import app as important_event_router
 from app.router_interactions import app as interactions_router
 from app.router_settings import app as settings_router
+from app.router_admin import app as admin_router
 import random,string
 
 
@@ -53,6 +54,7 @@ app.include_router(gift_router)
 app.include_router(important_event_router)
 app.include_router(interactions_router)
 app.include_router(settings_router)
+app.include_router(admin_router)
 
 
 

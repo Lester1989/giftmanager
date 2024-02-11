@@ -52,8 +52,8 @@ def generate_gift_ideas(session:Session, friend_ids:list[uuid.UUID]):
             name=generate_random_words(4),
             obtained=random.choice([True, False, False, False])
         )
-        for _ in range(random.choice([0,1,1,1,2,3]))
         for friend_id in friend_ids
+        for _ in range(random.choice([0,1,1,1,2,3]))
     ])
     session.commit()
 
@@ -66,8 +66,8 @@ def generate_interaction_logs(session:Session, friend_ids:list[uuid.UUID]):
             talking_points=generate_random_words(random.randint(4,10)),
             ask_again=random.choice([True, False])
         )
-        for _ in range(random.choice([0,1,2,2,3,4]))
         for friend_id in friend_ids
+        for _ in range(random.choice([0,1,2,2,3,4]))
     ])
     session.commit()
 
@@ -80,8 +80,8 @@ def generate_important_events(session:Session, friend_ids:list[uuid.UUID]):
             description=fake.text(),
             requires_gift=random.choice([True, False])
         )
-        for _ in range(random.choice([0,1,1,1,2,3]))
         for friend_id in friend_ids
+        for _ in range(random.choice([0,1,1,1,2,3]))
     ])
     session.commit()
 
@@ -91,8 +91,8 @@ def generate_talking_points(session:Session, friend_ids:list[uuid.UUID]):
             friend_id=friend_id,
             point=generate_random_words(random.randint(4,10))
         )
-        for _ in range(random.choice([0,1,1,1,2,3]))
         for friend_id in friend_ids
+        for _ in range(random.choice([0,1,1,1,2,3]))
     ])
     session.commit()
 

@@ -10,10 +10,13 @@ services:
       dockerfile: ./Dockerfile
     restart: unless-stopped
     environment:
+    
+    # You should change the connection string to your database
       - CONNECTIONSTRING=postgresql+psycopg2://friendshipmanager:friendshipmanager@postgres:5432/friendshipmanager
       - RESEND_API_KEY=INSERT_API_KEY_HERE
-      - RESEND_DOMAIN=friendship.lesterserver.de
-      - BASE_URL=https://friendship.lesterserver.de
+      - RESEND_DOMAIN=INSERT_YOUR_DOMAIN_HERE
+      - BASE_URL=INSERT_YOUR_BASE_URL_HERE
+      - ADMIN_EMAILS=INSERT_YOUR_ADMIN_EMAILS_HERE
     command: sh -c "alembic upgrade head && uvicorn app.main:app --port 8800 --host 0.0.0.0"
     ports:
       - 8800:8800
@@ -26,6 +29,7 @@ services:
     image: postgres:13.1-alpine
     restart: unless-stopped
     environment:
+    # You should change the following environment variables
       POSTGRES_USER: friendshipmanager
       POSTGRES_PASSWORD: friendshipmanager
       POSTGRES_DB: friendshipmanager
@@ -42,6 +46,7 @@ services:
     networks:
       - stack_intern
 
+  # recommended to use for development only. Change the login credentials if really needed for production
   pgadmin4-browser:
     image: dpage/pgadmin4
     restart: unless-stopped

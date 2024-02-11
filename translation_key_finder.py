@@ -29,6 +29,7 @@ for key in translation_keys:
     for translations in localized_keys.values():
         if key not in translations:
             translations[key] = f'{key.upper()}__MISSING__'
+            print(f'Key {key} is missing in one of the languages')
 
 # write the translations back to the files
 for lang, translations in localized_keys.items():

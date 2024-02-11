@@ -57,7 +57,7 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [X] link to github and dockerhub in about page
 - [X] add gift for event
 - [X] link to be me a coffee or something similar
-- [ ] admin view to see users and a count of their data
+- [X] admin view to see users and a count of their data
 - [ ] add tests
 - [ ] add pydantic forms violations errorhandling
 - [ ] automatic backups

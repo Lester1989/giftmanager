@@ -1,0 +1,54 @@
+{% extends 'base.html' %} {% block content %}
+<div class="w-2/3">
+    <div class="panel">
+        <h1 class="text-2xl font-bold mb-4">{{ txt_usage_counts }} ({{ friends_count | count }})</h1>
+        <table id="usage-table">
+            <thead class="text-lg border-b">
+                <tr>
+                    <th class="px-6">{{ txt_user_id }}</th>
+                    <th class="px-6">{{ txt_friend_count }}</th>
+                    <th class="px-6">{{ txt_gift_ideas_count }}</th>
+                    <th class="px-6">{{ txt_interaction_logs_count }}</th>
+                    <th class="px-6">{{ txt_important_events_count }}</th>
+                    <th class="px-6">{{ txt_talking_points_count }}</th>
+                    <th class="px-6">{{ txt_block_unblock }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user_id,user_counts in friends_count.items() %}
+                <tr class="border-b">
+                    <td class="text-center">{{ user_id }}</td>
+                    <td class="text-center">{{ user_counts['friends'] }}</td>
+                    <td class="text-center">{{ user_counts['gift_ideas'] }}</td>
+                    <td class="text-center">{{ user_counts['interaction_logs'] }}</td>
+                    <td class="text-center">{{ user_counts['important_events'] }}</td>
+                    <td class="text-center">{{ user_counts['talking_points'] }}</td>
+                    <td class="flex flex-row gap-2 content-center">
+                        {% if user_counts['is_activated'] %}
+                        <a class="inline-block rounded text-ari-neutral-grey-20 bg-ari-red" title="BLOCK"
+                            {% if user_id != current_user.id %} href="/deactivate/{{user_id}}" {% endif %}>
+                            {{ icons.block() }}
+                        </a>
+                        {% else %}
+                        <a class="inline-block rounded text-ari-neutral-grey-20 bg-ari-green" title="UNBLOCK"
+                            href="/activate/{{user_id}}">
+                            {{ icons.unblock() }}
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+    $(document).ready(function () {
+        $('#usage-table').DataTable({ ordering: true, searching:false });
+    });
+</script>
+{% endblock %}
