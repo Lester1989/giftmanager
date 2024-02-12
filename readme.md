@@ -62,6 +62,7 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [ ] add pydantic forms violations errorhandling
 - [ ] automatic backups
 - [ ] make landing page suggest to contact friend about a topic
+- [ ] **mobile friendly design** !!
 
 # Pending Refactorings and Maintenance
 
