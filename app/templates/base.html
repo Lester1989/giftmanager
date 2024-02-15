@@ -112,14 +112,41 @@
                 <div id="navigation" class="hidden md:block">
                     <div class="flex flex-col md:flex-row md:flex justify-end items-center space-x-4 md:space-x-6 bg-gray-1000 bg-opacity-75">
                         {% if request.session.get('logged_in', False) %}
-                        <a href="/friends" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Friends</a>
-                        <a href="/calendar" id="open-calendar" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Calendar</a>
-                        <a href="/settings" id="open-settings" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Settings</a>
-                        <a href="/activate_tutorial" id="start-tutorial" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Tutorial</a>
-                        <a href="/logout" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Logout</a>
+                        {% if has_demo_data %}
+                        <a class="text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+                            href="/remove_demo_data" id="remove-demo-data">
+                            {{ txt_remove_demo_data }}
+                        </a>
+                        {% endif %}
+                        <a class="text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+                            href="/friends">
+                            {{ txt_friends }}
+                        </a>
+                        <a class="text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+                            href="/calendar" id="open-calendar">
+                            {{ txt_calendar }}
+                        </a>
+                        <a class="text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+                            href="/settings" id="open-settings">
+                            {{ txt_settings }}
+                        </a>
+                        <a class="text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+                            href="/activate_tutorial" id="start-tutorial">
+                            {{ icons.help() }}
+                        </a>
+                        <a class="text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+                            href="/logout">
+                            {{ txt_logout }}
+                        </a>
                         {% else %}
-                        <a href="/login" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Login</a>
-                        <a href="/register" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Register</a>
+                        <a class="text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+                            href="/login">
+                            {{ txt_login }}
+                        </a>
+                        <a class="text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
+                            href="/register">
+                            {{ txt_register }}
+                        </a>
                         {% endif %}
                     </div>
                 </div>
