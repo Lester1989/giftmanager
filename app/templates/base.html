@@ -1,4 +1,3 @@
-
 {% import 'icons.j2' as icons %}
 <!DOCTYPE html>
 <html lang="en">
@@ -12,11 +11,12 @@
     <meta name="keywords" content="" />
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+        integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
     <!-- Sheperd for better first user experience -->
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css" />
 
     <link rel="stylesheet" href="/static/style.css" />
     {% block header %}
@@ -28,8 +28,23 @@
         html {
             font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
+
         {% block css %}
+
         {% endblock %}
+        #menu-toggle {
+        @apply absolute right-4 top-4;
+        }
+
+        #navigation {
+        @apply bg-gray-800 fixed top-0 left-0 right-0 bottom-0 md:static h-screen md:h-auto min-w-full md:min-w-0 z-40 overflow-auto transition-all ease-in-out duration-300;
+        }
+
+        @media (max-width: 768px) {
+        #navigation {
+            @apply flex flex-col items-start p-4 space-y-4;
+        }
+        }
     </style>
 </head>
 
@@ -37,21 +52,12 @@
     style="background-image: url('/static/header.png');">
     <div class="h-full">
         <!--Nav-->
-        <div class="w-full container mx-auto">
+        {# <div class="w-full container mx-auto">
             <div class="w-full flex items-center justify-between">
-                <a class="flex items-center text-primary-100 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
-                    href="/home" id="home">
-                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-tertiary-700 via-secondary-500 to-primary-500">
-                    {{ txt_page_title }}
-                    </span>
-                </a>
-
+               
                 <div class="flex w-1/2 justify-end content-center">
                     {% if request.session.get('logged_in',False) %}
-                    {# <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
-                        href="/test_mail">
-                        Test
-                    </a> #}
+
                     {% if has_demo_data %}
                     <a class="inline-block text-blue-300 no-underline hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out"
                         href="/remove_demo_data" id="remove-demo-data">
@@ -90,79 +96,78 @@
                     {% endif %}
                 </div>
             </div>
+        </div> #}
+        <div class="bg-gray-1000 bg-opacity-75 fixed top-0 left-0 right-0 z-50">
+            <div class="container mx-auto flex items-center justify-between px-4">
+                <a href="/home" id="home" class="flex items-center text-2xl">
+                    <span
+                        class="bg-clip-text text-transparent bg-gradient-to-r from-tertiary-700 via-secondary-500 to-primary-500">
+                        {{ txt_page_title }}
+                    </span>
+                </a>
+
+                <button id="menu-toggle" class="flex items-center justify-center focus:outline-none md:hidden">
+                    {{ icons.menu() }}
+                </button>
+                <div id="navigation" class="hidden md:block">
+                    <div class="flex flex-col md:flex-row md:flex justify-end items-center space-x-4 md:space-x-6 bg-gray-1000 bg-opacity-75">
+                        {% if request.session.get('logged_in', False) %}
+                        <a href="/friends" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Friends</a>
+                        <a href="/calendar" id="open-calendar" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Calendar</a>
+                        <a href="/settings" id="open-settings" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Settings</a>
+                        <a href="/activate_tutorial" id="start-tutorial" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Tutorial</a>
+                        <a href="/logout" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Logout</a>
+                        {% else %}
+                        <a href="/login" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Login</a>
+                        <a href="/register" class="text-blue-300 hover:text-secondary-500 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 transform hover:scale-125 duration-300 ease-in-out">Register</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!--Main-->
         <div class="container pt-8 md:pt-10 mx-auto flex flex-wrap flex-col md:flex-row items-start">
             {% block content %}
-<div class="flex flex-col xl:w-1/4 justify-center lg:items-start mx-auto overflow-y-hidden">
-    <div class="panel">
-        <h1 class="text-2xl font-bold mb-4">{{ txt_tips_gifts }}</h1>
-        Coming soon
-    </div>
-</div>
-<div class="flex flex-col xl:w-1/4 justify-center lg:items-start mx-auto overflow-y-hidden">
-    <div class="panel">
-        <h2 class="text-2xl font-bold mb-4">{{ txt_interaction_ideas }}</h1>
-        Coming soon
-    </div>
-</div>
-<div class="flex flex-col xl:w-1/4 justify-center lg:items-start mx-auto overflow-y-hidden">
-    <div class="panel">
-        <h2 class="text-2xl font-bold mb-4">{{ txt_opener_ideas }}</h1>
-        Coming soon
-    </div>
-</div>
-            <!--Left Col-->
-            {#
-            <div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
-                <h1
-                    class="my-4 text-3xl md:text-5xl text-white opacity-75 font-bold leading-tight text-center md:text-left">
-                    Main
-                    <span
-                        class="bg-clip-text text-transparent bg-gradient-to-r from-tertiary-700 via-secondary-500 to-primary-500">
-                        Hero Message
-                    </span>
-                    to sell yourself!
-                </h1>
-                <p class="leading-normal text-base md:text-2xl mb-8 text-center md:text-left">
-                    Sub-hero message, not too long and not too short. Make it just right!
-                </p>
-
-                <form class="bg-gray-900 opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
-                    <div class="mb-4">
-                        <label class="block text-blue-300 py-2 font-bold mb-2" for="emailaddress">
-                            Signup for our newsletter
-                        </label>
-                        <input
-                            class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
-                            id="emailaddress" type="text" placeholder="you@somewhere.com" />
-                    </div>
-
-                    <div class="flex items-center justify-between pt-4">
-                        <button
-                            class="btn-rainbow"
-                            type="button">
-                            Sign Up
-                        </button>
-                    </div>
-                </form>
+            <div class="flex flex-col w-full xl:w-1/3 xl:px-3 justify-center lg:items-start mx-auto overflow-y-hidden">
+                <div class="panel">
+                    <h1 class="text-2xl font-bold mb-4">{{ txt_tips_gifts }}</h1>
+                    <p class="py-2"> {{ txt_general_gift_tip_0 }} </p>
+                    <p class="py-2"> {{ txt_general_gift_tip_1 }} </p>
+                    <p class="py-2"> {{ txt_general_gift_tip_2 }} </p>
+                    <p class="py-2"> {{ txt_general_gift_tip_3 }} </p>
+                    <p class="py-2"> {{ txt_general_gift_tip_4 }} </p>
+                </div>
             </div>
-
-            <!--Right Col-->
-            <div class="w-full xl:w-3/5 p-12 overflow-hidden">
-                <img class="mx-auto w-full md:w-4/5 transform -rotate-6 transition hover:scale-105 duration-700 ease-in-out hover:rotate-6"
-                    src="/static/macbook.svg" />
+            <div class="flex flex-col w-full xl:w-1/3 xl:px-3 justify-center lg:items-start mx-auto overflow-y-hidden">
+                <div class="panel">
+                    <h2 class="text-2xl font-bold mb-4">{{ txt_interaction_ideas }}</h1>
+                    <p class="py-2"> {{ txt_general_interaction_tip_0 }} </p>
+                    <p class="py-2"> {{ txt_general_interaction_tip_1 }} </p>
+                    <p class="py-2"> {{ txt_general_interaction_tip_2 }} </p>
+                    <p class="py-2"> {{ txt_general_interaction_tip_3 }} </p>
+                    <p class="py-2"> {{ txt_general_interaction_tip_4 }} </p>
+                </div>
             </div>
-            #}
+            <div class="flex flex-col w-full xl:w-1/3 xl:px-3 justify-center lg:items-start mx-auto overflow-y-hidden">
+                <div class="panel">
+                    <h2 class="text-2xl font-bold mb-4">{{ txt_opener_ideas }}</h1>
+                    <p class="py-2"> {{ txt_general_opener_tip_0 }} </p>
+                    <p class="py-2"> {{ txt_general_opener_tip_1 }} </p>
+                    <p class="py-2"> {{ txt_general_opener_tip_2 }} </p>
+                    <p class="py-2"> {{ txt_general_opener_tip_3 }} </p>
+                    <p class="py-2"> {{ txt_general_opener_tip_4 }} </p>
+                </div>
+            </div>
             {% endblock %}
 
 
             <!--Footer-->
-            <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
+            <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in flex flex-row justify-between">
                 {% block footer %}
-                <a id="about-page" class="text-gray-500 no-underline hover:no-underline" href="/about">&copy; Lukas Jaspaert</a>
-                <div class="text-gray-500 no-underline text-end">
+                <a id="about-page" class="text-gray-500 no-underline hover:no-underline" href="/about">&copy; Lukas
+                    Jaspaert</a>
+                <div class="text-gray-500 no-underline">
                     ({{ app_version }})
                 </div>
                 {% endblock %}
@@ -171,6 +176,14 @@
     </div>
 </body>
 
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const navigation = document.getElementById('navigation');
+
+  menuToggle.addEventListener('click', () => {
+    navigation.classList.toggle('hidden');
+  });
+</script>
 {% block javascript %}
 {% endblock %}
 

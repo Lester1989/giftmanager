@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% block content %}
-<div class="w-1/2">
+<div class="w-full md:w-1/2 mx-auto">
   <div class="panel">
     <h1 class="text-2xl font-bold mb-4">{{ txt_login }}</h1>
     <form class="max-w-sm mx-auto" method="post">
@@ -16,7 +16,7 @@
     <div class="mt-4 text-center">
       <a href="/register" class="text-primary-500 hover:underline">{{ txt_register }}</a>
       <span class="text-gray-500 mx-2">|</span>
-      <a href="/password-reset" class="text-primary-500 hover:underline" >{{ txt_reset_password }}</a >
+      <a href="/password_reset" class="text-primary-500 hover:underline" >{{ txt_reset_password }}</a >
     </div>
   </div>
 </div>

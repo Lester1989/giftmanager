@@ -2,32 +2,39 @@
 
 {% import 'icons.j2' as icons %}
 {% block content %}
-<div class="panel mx-auto w-1/2">
-    <h1>{{ txt_upcoming_dates }}</h1>
-    <div>
-        {% for important_event in important_events %}
-        <div class="grid grid-cols-5 bg-primary-900 p-4 m-2 rounded-md shadow-lg shadow-blue-500">
-            <div class="col-span-4 flex flex-col">
-                <span>
-                    {{ friend_names[important_event.friend_id] }}
-                </span>
-                <span>
-                {{ important_event.name }}
-                </span>
-            </div>
-            <div class="col-span-1 flex flex-col">
-                <div class="text-xs">
-                    {{ important_event.date }}
+<div class="w-full md:w-1/2 xl:w-full">
+    <div class="panel mx-auto ">
+        <h1>{{ txt_upcoming_dates }}</h1>
+        <div class="xl:grid xl:grid-cols-3">
+            {% for important_event in important_events %}
+            <a href="/friends/{{ important_event.friend_id }}" class="cursor-pointer grid grid-cols-5 bg-primary-900 bg-opacity-75 p-4 m-2 rounded-md shadow-lg shadow-blue-500">
+                <div class="col-span-3 flex flex-col relative">
+                    {% if important_event.requires_gift %}
+                    <div class="absolute top-0 right-0 opacity-20 h-full">
+                        {{ icons.gift("h-full") }}
+                    </div>
+                    {% endif %}
+                    <span>
+                        {{ friend_names[important_event.friend_id] }}
+                    </span>
+                    <span>
+                        {{ important_event.name }}
+                    </span>
                 </div>
-                <div class="text-6xl">
-                    {{ important_event.days_until }}
+                <div class="col-span-2 flex flex-col items-end">
+                    <div class="text-xs">
+                        {{ txt_days_left }}
+                    </div>
+                    <div class="text-6xl">
+                        {{ important_event.days_until }}
+                    </div>
+                    <div class="text-xs">
+                        {{ important_event.date }}
+                    </div>
                 </div>
-                <div class="text-xs">
-                    {{ txt_days_left }}
-                </div>
-            </div>
+            </a>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
 {% endblock %}

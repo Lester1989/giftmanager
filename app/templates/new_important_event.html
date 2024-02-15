@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% block content %}
-<div class="w-1/2">
+<div class="w-full md:w-1/2 mx-auto">
   <div class="panel">
     <h1 class="text-2xl font-bold mb-4" action="/add_important_event/{{friend.id}}" method="post">{{ txt_create_important_event_for }} {{ friend.first_name }}</h1>
     <form class="max-w-sm mx-auto" action="/add_gift_idea/{{friend.id}}" method="post">

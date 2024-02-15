@@ -4,11 +4,11 @@
 {% block content %}
 <div class="flex flex-col w-full xl:w-3/5 justify-start lg:items-start overflow-y-hidden">
     <div class="panel">
-        <h1 class="text-2xl font-bold mb-4">{{ friend.first_name }} {{ friend.last_name }}</h1>
+        <h1 class="text-2xl font-bold mb-4">{{ friend.first_name }} {{ friend.last_name }} <a class="inline md:hidden" href="#edit-friend">{{ icons.edit("inline w-6 h-6")}}</a></h1>
         <h2 class="text-xl font-bold mb-4">{{ txt_last_interactions }}</h2>
         <div class="flex flex-row flex-wrap gap-4">
             <a href="/new_interaction/{{friend.id}}" class="w-32 h-32 border-secondary-700 hover:border-secondary-500 border-4 rounded-lg text-9xl text-center hover:text-primary-300">+</a>
-            {% for interaction in interactions %}
+            {% for interaction in interactions[:5] %}
             <div class="w-32 h-32 border-secondary-700 hover:border-secondary-500 border-4 rounded-lg relative {% if interaction.ask_again %} animate-pulse {% endif %}">
                 <div class="absolute w-full h-full text-gray-800 -z-10">
                     {% if interaction.via == InteractionViaType.email %}
@@ -65,8 +65,8 @@
         </div>
     </div>
 </div>
-<div class="w-full xl:w-2/5 px-12 overflow-hidden">
-    <div class="panel">
+<div class="w-full xl:w-2/5 md:ps-12 overflow-hidden">
+    <div class="panel" id="edit-friend">
 
         <form action="/edit_friend/{{friend.id}}" method="post">
             {% include "friend_form.html" %}
