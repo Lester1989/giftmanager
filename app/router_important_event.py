@@ -15,7 +15,7 @@ def add_important_event(request: Request, friend_id: str,current_user: User = De
     friend = db.session.query(Friend).filter(Friend.id == friend_id).first()
     if not friend or not friend.accessible_by(current_user.id,db.session):
         raise HTTPException(status_code=404, detail="Friend not found")
-    return templates.TemplateResponse("new_important_event.html", {"request": request, "friend": friend,"current_user":current_user}|get_translations(request))
+    return templates.TemplateResponse("important_event_new.html", {"request": request, "friend": friend,"current_user":current_user}|get_translations(request))
 
 @app.post("/add_important_event/{friend_id}", response_class=RedirectResponse)
 def add_important_event_post(request: Request, friend_id: str, new_important_event_date: date = Form(date.today()), new_important_event: str = Form(""), new_important_event_details: str = Form(""), requires_gift:bool=Form(False), current_user: User = Depends(auth.get_current_active_user)):
@@ -33,5 +33,34 @@ def delete_important_event(request: Request, important_event_id: str,current_use
     if not important_event or not important_event.accessible_by(current_user.id,db.session):
         raise HTTPException(status_code=404, detail="Important Event not found")
     db.session.delete(important_event)
+    db.session.commit()
+    return RedirectResponse(url=f'/friends/{important_event.friend_id}', status_code=status.HTTP_302_FOUND)
+
+@app.get("/edit_important_event/{important_event_id}", response_class=HTMLResponse)
+async def edit_important_event(request: Request, important_event_id: str,current_user: User = Depends(auth.get_current_active_user)):
+    important_event:ImportantEvent = db.session.query(ImportantEvent).get(important_event_id)
+    if not important_event or not important_event.accessible_by(current_user.id,db.session):
+        raise HTTPException(status_code=404, detail="Important Event not found")
+    friend:Friend = db.session.query(Friend).filter(Friend.id == important_event.friend_id).first()
+    if not friend or not friend.accessible_by(current_user.id,db.session):
+        raise HTTPException(status_code=404, detail="Friend not found")
+    return templates.TemplateResponse(
+        "important_event_details.html",
+        {
+            "request": request,
+            "important_event": important_event,
+            "friend": friend,
+            "current_user":current_user
+        }|get_translations(request))
+
+@app.post("/edit_important_event/{important_event_id}", response_class=RedirectResponse)
+async def edit_important_event_post(request: Request, important_event_id: str, new_important_event_date: date = Form(date.today()), new_important_event: str = Form(""), new_important_event_details: str = Form(""), requires_gift:bool=Form(False), current_user: User = Depends(auth.get_current_active_user)):
+    important_event:ImportantEvent = db.session.query(ImportantEvent).get(important_event_id)
+    if not important_event or not important_event.accessible_by(current_user.id,db.session):
+        raise HTTPException(status_code=404, detail="Important Event not found")
+    important_event.date = new_important_event_date
+    important_event.name = new_important_event
+    important_event.description = new_important_event_details
+    important_event.requires_gift = requires_gift
     db.session.commit()
     return RedirectResponse(url=f'/friends/{important_event.friend_id}', status_code=status.HTTP_302_FOUND)

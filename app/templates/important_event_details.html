@@ -1,0 +1,22 @@
+{% extends 'base.html' %} {% block content %}
+<div class="w-full md:w-1/2 mx-auto">
+  <div class="panel">
+    <h1 class="text-2xl font-bold mb-4" >{{ txt_edit_important_event_for }} {{ friend.first_name }}</h1>
+    <form class="max-w-sm mx-auto" action="/edit_important_event/{{important_event.id}}" method="post">
+       <div class="flex flex-col items-stretch w-full">
+        <label for="new_important_event" class="block font-bold" >{{ txt_important_event }}</label >
+        <input class="form-field" type="text" name="new_important_event" id="new_important_event" value="{{important_event.name}}" />
+      </div>
+        <div class="flex flex-col items-stretch w-full">
+            <label for="new_important_event_date" class="block font-bold" >{{ txt_date }}</label >
+            <input class="form-field" type="date" name="new_important_event_date" id="new_important_event_date" value="{{important_event.date}}" />
+        </div>
+      <div class="flex flex-col items-stretch w-full">
+        <label for="new_important_event_details" class="block font-bold" >{{ txt_details }}</label >
+        <textarea class="form-field" type="text" name="new_important_event_details" id="new_important_event_details">{{important_event.description}}</textarea>
+      </div>
+      <button type="submit" class="btn-rainbow">{{ txt_save }}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

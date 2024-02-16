@@ -64,8 +64,8 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [X] make landing page suggest to contact friend about a topic
 - [X] **mobile friendly design** !!
   - [X] repair tutorial on mobile
-- [ ] detail view for event
-- [ ] detail view for interaction
+- [X] detail view for event
+- [X] detail view for interaction
 - [ ] confirmation for delete actions
 - [ ] email reporting for admins
 - [ ] email reminders

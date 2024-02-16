@@ -9,7 +9,7 @@
         <div class="flex flex-row flex-wrap gap-4">
             <a href="/new_interaction/{{friend.id}}" class="w-32 h-32 border-secondary-700 hover:border-secondary-500 border-4 rounded-lg text-9xl text-center hover:text-primary-300">+</a>
             {% for interaction in interactions[:5] %}
-            <div class="w-32 h-32 border-secondary-700 hover:border-secondary-500 border-4 rounded-lg relative {% if interaction.ask_again %} animate-pulse {% endif %}">
+            <a href="/edit_interaction/{{interaction.id}}" class="w-32 h-32 border-secondary-700 hover:border-secondary-500 border-4 rounded-lg relative {% if interaction.ask_again %} animate-pulse {% endif %}">
                 <div class="absolute w-full h-full text-gray-800 -z-10">
                     {% if interaction.via == InteractionViaType.email %}
                     {{ icons.email("w-full h-full") }}
@@ -29,7 +29,7 @@
                 <div class="absolute top-6 px-2 py-1 text-center w-full text-wrap h-24 overflow-clip">
                     {{ interaction.talking_points}}
                 </div>
-            </div>
+            </a>
             {% endfor %}
         </div>
         <h2 class="text-xl font-bold mb-4">{{ txt_gift_ideas }}</h2>
@@ -52,7 +52,7 @@
         <div class="flex flex-row flex-wrap gap-4">
             <a href="/new_important_event?friend_id={{friend.id}}" class="w-32 h-32 border-primary-900 hover:border-primary-500 border-4 rounded-lg text-9xl text-center hover:text-primary-300">+</a>
             {% for event in important_events %}
-            <div class="w-32 h-32 border-primary-900 hover:border-primary-500 border-4 rounded-lg flex flex-col p-1">
+            <a href="/edit_important_event/{{event.id}}" class="w-32 h-32 border-primary-900 hover:border-primary-500 border-4 rounded-lg flex flex-col p-1">
                 <div class="text-center w-full">
                     {{ event.date.strftime("%d.%m.%Y") }}
                 </div>
@@ -60,7 +60,7 @@
                     <b>{{ event.name }}</b>
                     {{ event.description}}
                 </div>
-            </div>
+            </a>
             {% endfor %}
         </div>
     </div>

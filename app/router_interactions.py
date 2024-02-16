@@ -41,12 +41,12 @@ def new_interaction(request: Request, friend_id: str,current_user: User = Depend
     important_events = db.session.query(ImportantEvent).filter(ImportantEvent.friend_id == friend.id).all()
     talking_points = db.session.query(TalkingPoint).filter(TalkingPoint.friend_id == friend.id).all()
     return templates.TemplateResponse(
-        "new_interaction.html", 
+        "interaction_new.html", 
         {
             "request": request, 
             "friend": friend, 
             "current_user":current_user,
-            "date": date.today(),
+            "date_arg": date.today(),
             "InteractionViaType": InteractionViaType,
             "talking_point_suggstions": talking_points,
             "gift_ideas": gift_ideas,
@@ -62,3 +62,39 @@ async def add_interaction(request: Request, friend_id: str, date_arg: date = For
     db.session.add(interaction)
     db.session.commit()
     return RedirectResponse(url=f'/friends/{friend_id}', status_code=status.HTTP_302_FOUND)
+
+@app.get("/edit_interaction/{interaction_id}", response_class=RedirectResponse)
+async def edit_interaction_get(request: Request, interaction_id: str,current_user: User = Depends(auth.get_current_active_user)):
+    interaction:InteractionLog = db.session.query(InteractionLog).get(interaction_id)
+    if not interaction or not interaction.accessible_by(current_user.id,db.session):
+        raise HTTPException(status_code=404, detail="Interaction not found")
+    friend:Friend = db.session.query(Friend).filter(Friend.id == interaction.friend_id).first()
+    if not friend or not friend.accessible_by(current_user.id,db.session):
+        raise HTTPException(status_code=404, detail="Friend not found")
+    gift_ideas = db.session.query(GiftIdea).filter(GiftIdea.friend_id == friend.id).all()
+    important_events = db.session.query(ImportantEvent).filter(ImportantEvent.friend_id == friend.id).all()
+    talking_points = db.session.query(TalkingPoint).filter(TalkingPoint.friend_id == friend.id).all()
+    return templates.TemplateResponse(
+        "interaction_detail.html",
+        {
+            "request": request,
+            "interaction": interaction,
+            "friend": friend,
+            "current_user":current_user,
+            "InteractionViaType": InteractionViaType,
+            "talking_point_suggstions": talking_points,
+            "gift_ideas": gift_ideas,
+            "important_events": important_events
+        }|get_translations(request))
+
+@app.post("/edit_interaction/{interaction_id}", response_class=RedirectResponse)
+async def edit_interaction(request: Request, interaction_id: str, date_arg: date = Form(date.today()), via: InteractionViaType = Form(InteractionViaType.telephone), talking_points: str = Form(""), ask_again: bool = Form(False),current_user: User = Depends(auth.get_current_active_user)):
+    interaction:InteractionLog = db.session.query(InteractionLog).get(interaction_id)
+    if not interaction or not interaction.accessible_by(current_user.id,db.session):
+        raise HTTPException(status_code=404, detail="Interaction not found")
+    interaction.date = date_arg
+    interaction.via = via
+    interaction.talking_points = talking_points
+    interaction.ask_again = ask_again
+    db.session.commit()
+    return RedirectResponse(url=f'/friends/{interaction.friend_id}', status_code=status.HTTP_302_FOUND)

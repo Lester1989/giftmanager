@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% block content %}
+<div class="w-full md:w-1/2 mx-auto">
+  <div class="panel">
+    <h1 class="text-2xl font-bold mb-4" >{{ txt_edit_interaction_with }} {{ friend.first_name }}</h1>
+    <form action="/edit_interaction/{{interaction.id}}" method="post">
+        <div class="flex flex-col items-stretch w-full">
+          <label for="date_arg" class="block font-bold" >{{ txt_date }}</label >
+          <input class="form-field" type="date" name="date_arg" value="{{interaction.date}}" id="date_arg" />
+        </div>
+      <div class="flex flex-col items-stretch w-full">
+        <label for="talking_points" class="block font-bold" >{{ txt_talking_points }}</label >
+        <textarea class="form-field" name="talking_points" id="talking_points">{{interaction.talking_points}}</textarea >
+      </div>
+        <div class="flex items-center mt-4">
+          <input id="default-radio-1" type="radio" value="telephone" name="via" class="form-radio" {% if interaction.via == InteractionViaType.telephone %} checked {% endif %} />
+          <label for="default-radio-1" class="block font-bold" >{{ txt_via_telephone }}</label >
+        </div>
+        <div class="flex items-center">
+          <input id="default-radio-2" type="radio" value="email" name="via" class="form-radio" {% if interaction.via == InteractionViaType.email %} checked {% endif %} />
+          <label for="default-radio-2" class="block font-bold" >{{ txt_via_email }}</label >
+        </div>
+        <div class="flex items-center">
+          <input id="default-radio-3" type="radio" value="messenger" name="via" class="form-radio" {% if interaction.via == InteractionViaType.messenger %} checked {% endif %} />
+          <label for="default-radio-3" class="block font-bold" >{{ txt_via_messenger }}</label >
+        </div>
+        <div class="flex items-center">
+          <input id="default-radio-4" type="radio" value="in_person" name="via" class="form-radio" {% if interaction.via == InteractionViaType.in_person %} checked {% endif %} />
+          <label for="default-radio-4" class="block font-bold" >{{ txt_via_in_person }}</label >
+        </div>
+        <div class="flex items-center my-4">
+          <input id="ask_again" type="checkbox" value="" name="ask_again" class="form-radio" {% if interaction.ask_again %} checked {% endif %} />
+          <label for="ask_again" class="block font-bold" >{{ txt_ask_again}}</label >
+        </div>
+        <button type="submit" class="btn-rainbow">{{ txt_save }}</button>
+      </form>
+  </div>
+</div>
+{% endblock %}
