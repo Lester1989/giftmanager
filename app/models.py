@@ -69,6 +69,8 @@ class Friend(Base):
 
     @property
     def next_birthday(self):
+        if not self.birthday:
+            return None
         today = date.today()
         next_birthday_date = self.birthday.replace(year=today.year)
         if next_birthday_date < today:
@@ -76,15 +78,17 @@ class Friend(Base):
         return next_birthday_date
 
     def special_events(self)->list['ImportantEvent']:
-        events = [
-            ImportantEvent(
-                friend_id=self.id,
-                date=self.next_birthday,
-                name=f"{self.first_name}'s Birthday",
-                description="",
-                requires_gift=self.receives_birthday_gift
+        events = []
+        if self.birthday:
+            events.append(
+                ImportantEvent(
+                    friend_id=self.id,
+                    date=self.next_birthday,
+                    name=f"{self.first_name}'s Birthday",
+                    description="",
+                    requires_gift=self.receives_birthday_gift
+                )
             )
-        ]
         if self.receives_christmas_gift:
             events.append(
                 ImportantEvent(

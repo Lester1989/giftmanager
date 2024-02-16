@@ -22,7 +22,7 @@ import random,string
 
 
 app = FastAPI()
-app.add_middleware(DBSessionMiddleware, db_url=os.getenv('CONNECTIONSTRING',"sqlite:///app.db"),engine_args={"echo":True})
+app.add_middleware(DBSessionMiddleware, db_url=os.getenv('CONNECTIONSTRING',"sqlite:///app.db"),engine_args={"echo":False})
 
 @app.middleware("http")
 async def check_logged_in(request: Request, call_next):

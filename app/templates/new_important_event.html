@@ -1,8 +1,8 @@
 {% extends 'base.html' %} {% block content %}
 <div class="w-full md:w-1/2 mx-auto">
   <div class="panel">
-    <h1 class="text-2xl font-bold mb-4" action="/add_important_event/{{friend.id}}" method="post">{{ txt_create_important_event_for }} {{ friend.first_name }}</h1>
-    <form class="max-w-sm mx-auto" action="/add_gift_idea/{{friend.id}}" method="post">
+    <h1 class="text-2xl font-bold mb-4" >{{ txt_create_important_event_for }} {{ friend.first_name }}</h1>
+    <form class="max-w-sm mx-auto" action="/add_important_event/{{friend.id}}" method="post">
        <div class="flex flex-col items-stretch w-full">
         <label for="new_important_event" class="block font-bold" >{{ txt_important_event }}</label >
         <input class="form-field" type="text" name="new_important_event" id="new_important_event" />
