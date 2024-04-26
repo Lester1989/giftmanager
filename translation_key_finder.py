@@ -16,7 +16,7 @@ for file in os.listdir(folder_templates):
         # find all the strings that are in the format of {{ txt_key }} starting with txt_
         matches = re.findall(r'{{\s*txt_[^}]*\s*}}', text)
         for match in matches:
-            translation_keys.add(match.strip('{}').strip())
+            translation_keys.add(match.strip('{}').replace('|safe','').strip())
 
 
 
