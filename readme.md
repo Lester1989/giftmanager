@@ -69,6 +69,14 @@ If you make changes to the database, you need to run `alembic revision --autogen
 - [ ] confirmation for delete actions
 - [ ] email reporting for admins
 - [ ] email reminders
+- [ ] recurring events
+- [ ] hero section for landing page
+  - [ ] add a picture
+  - [X] add a slogan
+  - [X] add a call to action
+  - [ ] add testimonials (LATER)
+  - [ ] add benefits
+  - [ ] add a FAQ
 
 
 # Pending Refactorings and Maintenance
